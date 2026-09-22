@@ -173,6 +173,46 @@ SUPABASE_SERVICE_ROLE_KEY=
 ```
 
 Vitest does not auto-load `.env`; integration tests start with `import 'dotenv/config'`.
+**`npx tsx` ไม่โหลด `.env` เช่นกัน** — สคริปต์ใน `scripts/` ต้องขึ้นต้นด้วย
+`import 'dotenv/config'` ไม่งั้นจะรายงานว่าไม่พบคีย์ทั้งที่ตั้งไว้เรียบร้อย
+
+**`NEXT_PUBLIC_SUPABASE_URL` ต้องเป็นโดเมนเปล่า ห้ามมี `/rest/v1` ต่อท้าย**
+(เกิดขึ้นจริง 2026-09-22) หน้า Data API ของ Supabase แสดงสองค่าใกล้กันคือ
+**Project URL** กับ **RESTful endpoint** ซึ่งตัวหลังมี `/rest/v1` ติดมาด้วย
+`supabase-js` เติมเส้นทางเอง (`/auth/v1/…`, `/rest/v1/…`) จากค่า base ที่เราให้
+คัดลอกผิดช่องแล้วคำขอล็อกอินจะกลายเป็น `…/rest/v1/auth/v1/token` ซึ่งวิ่งไปหา
+**PostgREST แทน GoTrue** แล้วได้ 404 พร้อม `Proxy-Status: PostgREST; error=PGRST125`
+**สิ่งที่ทำให้หาสาเหตุยากคือหน้าจอ** — `authErrorMessage` ไม่มีกฎข้อไหนตรงกับ 404
+จึงตกไปที่ `GENERIC_AUTH_ERROR` ผู้ใช้เห็นแค่ "ดำเนินการไม่สำเร็จ กรุณาลองใหม่อีกครั้ง"
+ซึ่งอ่านแล้วนึกว่ารหัสผ่านผิด ทั้งที่ระบบยืนยันตัวตนไม่เคยถูกเรียกเลยสักครั้ง
+**ข้อความกลางที่ออกแบบมาเพื่อไม่รั่วข้อมูล ก็ปิดบังสาเหตุจากคนแก้ด้วย** —
+เวลาเจออาการนี้ให้เปิด Network ดู URL จริงก่อนเสมอ อย่าเชื่อข้อความบนหน้าจอ
+
+**`DATABASE_URL` ไม่มีโค้ดไฟล์ไหนอ่านเลย** ตรวจแล้ว 2026-09-22 — มีแต่ใน `.env`,
+`.env.example`, `CLAUDE.md`, `README.md` และ `package.json` ไม่มี driver ต่อ Postgres
+สักตัว (ไม่มี `pg`/`drizzle`/`prisma`/`kysely`) แอปคุยกับฐานผ่าน Supabase REST ล้วนๆ
+**ห้ามใส่ใน Vercel** — credential ที่ไม่มีใครใช้แต่นั่งอยู่ใน production คือพื้นที่เสี่ยง
+ที่ได้ประโยชน์เป็นศูนย์ เก็บไว้ใน `.env` บนเครื่องสำหรับต่อ psql เองได้
+
+### ย้ายไปใช้ Supabase API key รูปแบบใหม่ (2026-09-22)
+
+`SUPABASE_SERVICE_ROLE_KEY` ถือค่า `sb_secret_…` และ `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+ถือค่า `sb_publishable_…` แล้ว — **ชื่อตัวแปรคงเดิมโดยตั้งใจ** เพราะชื่อเป็นป้ายที่
+โค้ดเราตั้งเอง การเปลี่ยนชื่อต้องแก้สามไฟล์ + Vercel เพื่อผลลัพธ์ที่เท่าเดิม
+บรรทัด `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` ใน `.env` เป็นของเหลือ ไม่มีโค้ดอ่าน
+
+- **legacy `service_role` เพิกถอนทีละตัวไม่ได้** ต้อง reset JWT secret ซึ่งลาก `anon`
+  ไปด้วยและทำให้ทุก session หลุด ส่วน `sb_secret_…` สร้างหลายตัวและลบทีละอันได้
+- **`@supabase/ssr` 0.5.2 รองรับคีย์รูปแบบใหม่ได้** ยืนยันด้วยการล็อกอินจริงบน
+  production แล้ว ไม่ต้องอัปเกรด (เคยกังวลว่าเวอร์ชันเก่าเกิน — ไม่จริง)
+- **ใน Vercel ตัวแปร `NEXT_PUBLIC_*` ต้องเป็นชนิด Config ไม่ใช่ Secret** — Secret
+  เป็นแบบเขียนอย่างเดียว เปลี่ยนเป็น Config ทีหลังไม่ได้ ต้องลบแล้วสร้างใหม่
+  และ **`NEXT_PUBLIC_` เป็นความลับไม่ได้อยู่แล้ว** Next.js ฝังค่าลง JS ที่ส่งไป
+  เบราว์เซอร์ตอน build การตั้งเป็น Secret กันได้แค่ตัวเราอ่านย้อนหลังในหน้า Vercel
+  ด่านจริงของคีย์นี้คือ RLS + column grant (migration 016, 019) ไม่ใช่การซ่อนคีย์
+- **GitHub Actions ไม่มี secret สักตัว** (ยืนยัน 2026-09-22) `sync-phantombuster.ts`
+  เรียก `readPhantombusterConfig` ที่บรรทัด 52 แล้ว `process.exit(0)` ที่บรรทัด 59
+  **ก่อนถึง `getServerClient()` ที่บรรทัด 67** จึงไม่มีทางพลาดไปใช้คีย์เก่า
 
 ## Commands
 
