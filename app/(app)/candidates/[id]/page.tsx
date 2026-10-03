@@ -2,7 +2,7 @@ import { getServerClient } from '@/lib/supabase/server'
 import { getSession, hasRole } from '@/lib/auth/session'
 import Timeline from '@/components/Timeline'
 import AnalyzePanel from '@/components/AnalyzePanel'
-import AddToShortlist from '@/components/AddToShortlist'
+import SaveToShortlist from '@/components/SaveToShortlist'
 import SuppressButton from '@/components/SuppressButton'
 import { logActivity } from '@/lib/activity/log'
 
@@ -42,6 +42,36 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
 
   const skills: string[] = (c as any).candidate_skills?.map((x: any) => x.skills?.name).filter(Boolean) ?? []
 
+  // **`.eq('owner_id', ...)` คือการควบคุมการเข้าถึง ไม่ใช่การกรองเพื่อความสวยงาม**
+  // หน้านี้ใช้ `getServerClient()` ซึ่งเป็น service-role และ **bypass RLS**
+  // ตัวเดิม `AddToShortlist` ดึงเองด้วย anon key ที่ RLS กรองเจ้าของให้อัตโนมัติ
+  // การย้ายมาดึงฝั่งเซิร์ฟเวอร์จึงถอดด่านนั้นออกโดยไม่มีอะไรเตือน —
+  // **ลืมบรรทัดนี้แล้วทุกคนจะเห็น Shortlist ของคนอื่นทั้งระบบ**
+  // (หลักเดียวกับที่ route ของ `self_profiles` บันทึกไว้)
+  let myLists: { id: string; name: string }[] = []
+  let memberOf: string[] = []
+  if (session) {
+    const { data: ls, error: lsErr } = await db
+      .from('shortlists')
+      .select('id, name')
+      .eq('owner_id', session.userId)
+      .order('created_at')
+    if (lsErr) console.error('read shortlists failed:', lsErr.message)
+    myLists = (ls ?? []) as any[]
+
+    if (myLists.length > 0) {
+      // **ต้องจำกัดด้วย `.in()` ด้วย** — `shortlist_candidates` ไม่มีคอลัมน์เจ้าของ
+      // มีแต่ `shortlist_id` การกรองด้วย candidate_id อย่างเดียวจะคืนแถวของทุกคน
+      const { data: links, error: linkErr } = await db
+        .from('shortlist_candidates')
+        .select('shortlist_id')
+        .eq('candidate_id', id)
+        .in('shortlist_id', myLists.map((l) => l.id))
+      if (linkErr) console.error('read shortlist links failed:', linkErr.message)
+      memberOf = (links ?? []).map((l: any) => l.shortlist_id)
+    }
+  }
+
   return (
     <main>
       <div className="card">
@@ -52,6 +82,17 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
             <p className="muted" style={{ margin: '2px 0' }}>{(c as any).headline}</p>
             {(c as any).location && <p className="faint" style={{ margin: 0, fontSize: 13 }}>{(c as any).location}</p>}
           </div>
+          {/* ปุ่มบันทึกอยู่กับการกระทำอื่นของผู้สมัครคนนี้ ไม่ใช่การ์ดแยกท้ายหน้า
+              แบบเดิม — คนที่อ่านโปรไฟล์แล้วตัดสินใจว่าสนใจ จะกดทันทีตรงนั้น
+              ไม่ใช่เลื่อนลงไปหาแบบฟอร์มที่ท้ายหน้า
+              **ไม่ส่ง `onChange`** เพราะหน้านี้เป็น server component ส่งฟังก์ชัน
+              ข้ามไปให้ client component ไม่ได้ — คอมโพเนนต์จัดการ state ของตัวเองอยู่แล้ว */}
+          <SaveToShortlist
+            candidateId={id}
+            candidateName={(c as any).full_name}
+            lists={myLists}
+            memberOf={memberOf}
+          />
           {(c as any).linkedin_url && (
             <a href={(c as any).linkedin_url} target="_blank" rel="noreferrer" className="btn">LinkedIn ↗</a>
           )}
@@ -70,7 +111,6 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
       </div>
 
       <AnalyzePanel candidateId={id} />
-      <AddToShortlist candidateId={id} candidateName={(c as any).full_name} />
 
       {canSuppress && (
         <>
