@@ -230,21 +230,44 @@ const canCreate = !!session && hasRole(session.role, 'data_manager')
 
 ---
 
-## 4. migration 022 — สรุปทั้งไฟล์
+## 4. migration — แยกเป็นสองไฟล์
+
+**แยกเพราะผลกระทบต่อระบบที่ deploy อยู่ต่างกันสิ้นเชิง** ฐานข้อมูลมีชุดเดียว ทั้งเว็บจริง
+และเครื่องพัฒนาชี้ไปที่เดียวกัน migration จึงมีผลทันทีที่รันโดยไม่สนว่าโค้ดถูก deploy หรือยัง
+
+### 022a — รันได้ทันที
 
 ```sql
--- 1. สถานะบัญชี
 create type account_status as enum ('pending', 'approved', 'rejected');
 alter table profiles add column status account_status not null default 'pending';
 update profiles set status = 'approved';
 
--- 2. เพดานชื่อ shortlist
-alter table shortlists add constraint shortlists_name_len
-  check (char_length(trim(name)) between 1 and 60);
-
--- 3. ลบคอลัมน์ที่ไม่มีใครใช้ (ตรวจว่าว่างก่อน)
 alter table shortlist_candidates drop column note;
 ```
+
+**ไม่กระทบเว็บที่ deploy อยู่เลย** เพราะโค้ดที่ใช้งานจริงทำ `.select('role')` ไม่ได้ดึง
+`status` และไม่มีที่ไหนอ่าน `note` — ให้ช่วงปลอดภัยสำหรับพัฒนาและทดสอบในเครื่อง
+
+### 022b — รันพร้อมตอน deploy
+
+```sql
+alter table shortlists add constraint shortlists_name_len
+  check (char_length(trim(name)) between 1 and 60);
+```
+
+**กระทบทันทีที่รัน** หลังจากนั้นถ้ามีคนสร้าง Shortlist ชื่อยาวเกิน 60 บนเวอร์ชันที่ deploy
+อยู่ จะเห็นข้อความ Postgres ดิบ เพราะโค้ดเดิมเขียน `setMsg(error.message)` จึงต้องรัน
+พร้อมกับที่ `maxLength={60}` ของช่องกรอกถูก deploy ออกไป
+
+**ตรวจแถวเดิมก่อนรันเสมอ** — `ADD CONSTRAINT` ตรวจย้อนหลัง มีแถวผิดเงื่อนไขแม้แถวเดียว
+คำสั่งจะล้มทั้งไฟล์
+
+```sql
+select id, name, char_length(name) as len from shortlists
+where char_length(trim(name)) not between 1 and 60;
+```
+
+---
 
 **ไม่แตะ `grant update` ของ migration 019** และไม่เพิ่ม policy ให้ `shortlists`
 เพราะ `for all using (owner_id = auth.uid())` ครอบ insert/update/delete อยู่แล้ว

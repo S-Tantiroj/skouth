@@ -28,22 +28,27 @@
 
 - **ผู้ดูแลเปลี่ยนสถานะตัวเองเป็น `rejected`** → ต้องถูกปฏิเสธ มิฉะนั้นล็อกตัวเองออกและกู้ได้ทางเดียวคือ SQL editor (ครอบใน Task 5)
 - **บัญชีที่ถูกปฏิเสธแล้วอนุมัติใหม่** → ต้องใช้งานได้ทันทีโดยไม่ต้องล้าง cookie เพราะ `decideAccess` อ่านสถานะสดทุกคำขอ (ครอบใน Task 2)
-- **ส่งชื่อ Shortlist 61 ตัวอักษรผ่าน PostgREST ตรง** → ฐานข้อมูลต้องปฏิเสธ ไม่ใช่กันแค่ที่ `maxLength` ของช่องกรอก (ครอบใน Task 1)
-- **กดติ๊กซ้ำเร็วๆ บนผู้สมัครคนเดิม** → ต้องไม่เกิด error จาก primary key ซ้ำ (ครอบใน Task 7)
-- **ตั้งชื่อ Shortlist ซ้ำกับรายการที่มีอยู่** → ระบบอนุญาตโดยตั้งใจ ไม่มี unique constraint ต้องไม่โยน error (ครอบใน Task 1)
+- **ส่งชื่อ Shortlist 61 ตัวอักษรผ่าน PostgREST ตรง** → ฐานข้อมูลต้องปฏิเสธ ไม่ใช่กันแค่ที่ `maxLength` ของช่องกรอก (ครอบใน Task 7)
+- **กดติ๊กซ้ำเร็วๆ บนผู้สมัครคนเดิม** → ต้องไม่เกิด error จาก primary key ซ้ำ (ครอบใน Task 8)
+- **ตั้งชื่อ Shortlist ซ้ำกับรายการที่มีอยู่** → ระบบอนุญาตโดยตั้งใจ ไม่มี unique constraint ต้องไม่โยน error (ครอบใน Task 7)
 
 ---
 
 # เฟส 1 — ฐานข้อมูล
 
-### Task 1: migration 022
+### Task 1: migration 022a — สถานะบัญชี และลบคอลัมน์ `note`
 
 **Files:**
-- Create: `supabase/migrations/022_account_status_and_shortlist_limits.sql`
-- Test: `supabase/migrations/022_account_status_and_shortlist_limits.int.test.ts`
+- Create: `supabase/migrations/022a_account_status.sql`
+- Test: `supabase/migrations/022a_account_status.int.test.ts`
 
 **Interfaces:**
-- Produces: คอลัมน์ `profiles.status` ชนิด `account_status` · constraint `shortlists_name_len` · คอลัมน์ `shortlist_candidates.note` หายไป
+- Produces: คอลัมน์ `profiles.status` ชนิด `account_status` · คอลัมน์ `shortlist_candidates.note` หายไป
+
+> **ทำไมแยกจาก 022b** — สองคำสั่งในไฟล์นี้**ไม่กระทบเว็บที่ deploy อยู่เลย** เพราะโค้ดที่
+> ใช้งานจริงทำ `.select('role')` ไม่ได้ดึง `status` และไม่มีที่ไหนอ่าน `note` จึงรันได้ทันที
+> แล้วพัฒนาเฟส 2 ต่อโดยไม่มีช่วงที่ฐานข้อมูลเข้มกว่าหน้าจอ · ส่วน constraint ชื่อ Shortlist
+> กระทบทันที จึงอยู่ใน 022b ที่รันตอน deploy เฟส 3
 
 - [ ] **Step 1: ตรวจว่า `note` ว่างจริงก่อนเขียน migration**
 
@@ -53,17 +58,14 @@
 select count(*) from shortlist_candidates where note is not null and trim(note) <> '';
 ```
 
-ได้ 0 จึงไปต่อ · ไม่เป็น 0 ให้หยุดและรายงาน — `drop column` เอาคืนไม่ได้
+ได้ 0 จึงไปต่อ · ไม่เป็น 0 ให้หยุดและรายงาน — `drop column` เอาคืนไม่ได้ และไม่มี staging
 
-- [ ] **Step 2: เขียน `022_account_status_and_shortlist_limits.sql`**
+- [ ] **Step 2: เขียน `022a_account_status.sql`**
 
 ```sql
 create type account_status as enum ('pending', 'approved', 'rejected');
 alter table profiles add column status account_status not null default 'pending';
 update profiles set status = 'approved';
-
-alter table shortlists add constraint shortlists_name_len
-  check (char_length(trim(name)) between 1 and 60);
 
 alter table shortlist_candidates drop column note;
 ```
@@ -75,7 +77,7 @@ alter table shortlist_candidates drop column note;
 
 - [ ] **Step 3: เขียน integration test ให้แดง**
 
-`supabase/migrations/022_account_status_and_shortlist_limits.int.test.ts` ตามรูปแบบของ
+`supabase/migrations/022a_account_status.int.test.ts` ตามรูปแบบของ
 `019_lock_profile_columns.int.test.ts` — สร้างบัญชีจริงด้วย `admin.auth.admin.createUser`
 แล้วล็อกอินด้วย anon key ยิง PostgREST ตรง
 
@@ -90,34 +92,22 @@ test('ผู้ใช้ที่ล็อกอินแล้วแก้ stat
   // ตรวจค่าในฐานซ้ำด้วย service-role ไม่เชื่อค่า error อย่างเดียว
   expect(after.status).toBe('pending')
 })
-
-test('ชื่อ shortlist ยาวเกิน 60 ตัวอักษรถูกฐานข้อมูลปฏิเสธ', async () => {
-  // insert ด้วย anon key: 60 ตัวผ่าน · 61 ตัวไม่ผ่าน · '   ' ไม่ผ่าน
-})
-
-test('ชื่อ shortlist ซ้ำกันได้ ไม่มี unique constraint', async () => {
-  // insert ชื่อเดียวกันสองครั้งด้วย anon key → ทั้งสองครั้งสำเร็จ
-  // เป็นพฤติกรรมที่ตั้งใจ ผู้ใช้ตั้งชื่อซ้ำได้ถ้าต้องการ
-})
 ```
-
-**เขียนเลข 60 และ 61 ลงไปตรงๆ ห้ามอ่านจากค่าคงที่ในโค้ด** — เทสต์ที่อ่านค่าคงที่
-แล้ววนลูปจะเขียวต่อไปแม้มีคนเปลี่ยนเพดาน
 
 - [ ] **Step 4: รันเทสต์ให้แดง**
 
-Run (บน Windows): `npx vitest run --config vitest.integration.config.ts supabase/migrations/022_account_status_and_shortlist_limits.int.test.ts`
+Run (บน Windows): `npx vitest run --config vitest.integration.config.ts supabase/migrations/022a_account_status.int.test.ts`
 Expected: FAIL — ยังไม่ได้รัน migration
 
 - [ ] **Step 5: รัน migration ใน Supabase SQL editor แล้วรันเทสต์ซ้ำ**
 
-Expected: PASS ทั้งสามเทสต์
+Expected: PASS ทั้งสองเทสต์
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add supabase/migrations/022_account_status_and_shortlist_limits.sql supabase/migrations/022_account_status_and_shortlist_limits.int.test.ts
-git commit -m "feat: migration 022 สถานะบัญชี เพดานชื่อ shortlist และลบคอลัมน์ note"
+git add supabase/migrations/022a_account_status.sql supabase/migrations/022a_account_status.int.test.ts
+git commit -m "feat: migration 022a สถานะบัญชี และลบคอลัมน์ note"
 ```
 
 ---
@@ -361,7 +351,69 @@ git commit -m "feat: หน้าจัดการผู้ใช้แสด�
 
 # เฟส 3 — Shortlist
 
-### Task 7: `SaveToShortlist`
+### Task 7: migration 022b — เพดานชื่อ Shortlist
+
+**Files:**
+- Create: `supabase/migrations/022b_shortlist_name_limit.sql`
+- Test: `supabase/migrations/022b_shortlist_name_limit.int.test.ts`
+
+**Interfaces:**
+- Produces: constraint `shortlists_name_len` บน `shortlists.name`
+
+> **ไฟล์นี้กระทบเว็บที่ deploy อยู่ทันทีที่รัน** ต่างจาก 022a — หลังรันแล้ว ถ้ามีคนสร้าง
+> Shortlist ชื่อยาวเกิน 60 หรือเว้นวรรคล้วนบนเวอร์ชันที่ deploy อยู่ จะเห็นข้อความ
+> Postgres ดิบ เพราะโค้ดเดิมเขียน `setMsg(error.message)` · **จึงรันพร้อมตอน deploy
+> เฟส 3** เพื่อให้ `maxLength={60}` ที่ช่องกรอกมาถึงผู้ใช้พร้อมกับ constraint
+
+- [ ] **Step 1: ตรวจแถวที่มีอยู่ก่อนรัน**
+
+`ALTER TABLE ADD CONSTRAINT` ตรวจแถวเดิมด้วย — **มีแถวที่ผิดเงื่อนไขแม้แถวเดียว
+migration จะล้มทั้งไฟล์**
+
+```sql
+select id, name, char_length(name) as len from shortlists
+where char_length(trim(name)) not between 1 and 60;
+```
+
+ได้ 0 แถวจึงรันได้ · มีแถวต้องแก้ชื่อก่อน
+
+- [ ] **Step 2: เขียน `022b_shortlist_name_limit.sql`**
+
+```sql
+alter table shortlists add constraint shortlists_name_len
+  check (char_length(trim(name)) between 1 and 60);
+```
+
+`trim` อยู่ข้างในเพราะชื่อที่เป็นช่องว่างล้วนต้องไม่ผ่าน
+
+- [ ] **Step 3: เขียน integration test ให้แดง**
+
+```ts
+test('ชื่อ shortlist ยาวเกิน 60 ตัวอักษรถูกฐานข้อมูลปฏิเสธ', async () => {
+  // insert ด้วย anon key: 60 ตัวผ่าน · 61 ตัวไม่ผ่าน · '   ' ไม่ผ่าน
+})
+
+test('ชื่อ shortlist ซ้ำกันได้ ไม่มี unique constraint', async () => {
+  // insert ชื่อเดียวกันสองครั้งด้วย anon key → ทั้งสองครั้งสำเร็จ
+  // เป็นพฤติกรรมที่ตั้งใจ ผู้ใช้ตั้งชื่อซ้ำได้ถ้าต้องการ
+})
+```
+
+**เขียนเลข 60 และ 61 ลงไปตรงๆ ห้ามอ่านจากค่าคงที่ในโค้ด** — เทสต์ที่อ่านค่าคงที่
+แล้ววนลูปจะเขียวต่อไปแม้มีคนเปลี่ยนเพดาน
+
+- [ ] **Step 4: รันเทสต์ให้แดง → รัน migration → รันซ้ำให้เขียว**
+
+Run (บน Windows): `npx vitest run --config vitest.integration.config.ts supabase/migrations/022b_shortlist_name_limit.int.test.ts`
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add supabase/migrations/022b_shortlist_name_limit.sql supabase/migrations/022b_shortlist_name_limit.int.test.ts
+git commit -m "feat: migration 022b เพดานความยาวชื่อ shortlist"
+```
+
+### Task 8: `SaveToShortlist`
 
 **Files:**
 - Create: `components/SaveToShortlist.tsx`
@@ -398,7 +450,7 @@ Run: `npx vitest run components/SaveToShortlist.test.tsx`
 ใช้ `upsert` ไม่ใช่ `insert` สำหรับ `shortlist_candidates` เพื่อให้การกดซ้ำไม่เป็น error
 · ล็อกปุ่มระหว่างคำขอยังไม่เสร็จ · เรียก `track()` ด้วย action เดิม
 (`shortlist_create` · `shortlist_add` · `shortlist_remove`)
-· ช่องชื่อใส่ `maxLength={60}` ให้ตรงกับ constraint ของ Task 1
+· ช่องชื่อใส่ `maxLength={60}` ให้ตรงกับ constraint ของ Task 7
 
 - [ ] **Step 4: เปลี่ยนหน้ารายละเอียดผู้สมัครให้ใช้ตัวใหม่ แล้วลบ `AddToShortlist.tsx`**
 
@@ -419,14 +471,14 @@ git rm components/AddToShortlist.tsx
 git commit -m "feat: ปุ่มบันทึกเข้า Shortlist แบบติ๊กเพิ่มติ๊กออก"
 ```
 
-### Task 8: ใส่ปุ่มที่ผลการค้นหาและหน้างาน
+### Task 9: ใส่ปุ่มที่ผลการค้นหาและหน้างาน
 
 **Files:**
 - Modify: `app/(app)/search/page.tsx:201-202`
 - Modify: `components/JobMatches.tsx`
 
 **Interfaces:**
-- Consumes: `<SaveToShortlist>` จาก Task 7
+- Consumes: `<SaveToShortlist>` จาก Task 8
 
 - [ ] **Step 1: ดึงข้อมูลสองชุดต่อหน้า**
 
@@ -446,7 +498,7 @@ git add "app/(app)/search/page.tsx" components/JobMatches.tsx
 git commit -m "feat: บันทึกเข้า Shortlist ได้จากผลการค้นหาและหน้างาน"
 ```
 
-### Task 9: หน้า `/shortlists` แก้ชื่อและลบ
+### Task 10: หน้า `/shortlists` แก้ชื่อและลบ
 
 **Files:**
 - Modify: `app/(app)/shortlists/page.tsx`
@@ -478,7 +530,7 @@ git commit -m "feat: แก้ชื่อและลบ Shortlist ได้"
 
 # เฟส 4 — หน้า Jobs
 
-### Task 10: ซ่อนการ์ดสร้างงาน
+### Task 11: ซ่อนการ์ดสร้างงาน
 
 **Files:**
 - Modify: `app/(app)/jobs/page.tsx`
@@ -526,12 +578,12 @@ Run (Windows): `npm run test:integration` → เขียว
 |---|---|
 | การตรวจ `status` ใน `decideAccess` | เทสต์ใน `profileGate.test.ts` ที่เกี่ยวกับสถานะ |
 | `id === session.userId` ใน route ของ Task 5 | เทสต์ "แอดมินเปลี่ยนสถานะตัวเองไม่ได้" |
-| `shortlists_name_len` constraint | เทสต์ความยาวชื่อใน int test ของ Task 1 |
-| `canCreate &&` ในหน้า Jobs | ไม่มีเทสต์แดง — ตามที่ตั้งใจไว้ใน Task 10 |
+| `shortlists_name_len` constraint | เทสต์ความยาวชื่อใน int test ของ Task 7 |
+| `canCreate &&` ในหน้า Jobs | ไม่มีเทสต์แดง — ตามที่ตั้งใจไว้ใน Task 11 |
 
 คืนทุกอย่างกลับหลังตรวจเสร็จ
 
 - [ ] **อัปเดต `CLAUDE.md`**
 
-เพิ่มหัวข้อ migration 022 · กฎว่า `status` ต้องไม่อยู่ใน `grant update` ·
+เพิ่มหัวข้อ migration 022a และ 022b พร้อมเหตุผลที่แยกไฟล์ · กฎว่า `status` ต้องไม่อยู่ใน `grant update` ·
 บันทึกว่าหน้า Jobs เคยแสดงฟอร์มที่ API ปฏิเสธ · และว่าคอลัมน์ `note` ถูกลบแล้ว
