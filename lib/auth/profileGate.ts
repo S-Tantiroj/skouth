@@ -18,9 +18,14 @@ import type { Role } from './session'
 
 export const ROLE_VALUES = ['admin', 'data_manager', 'member'] as const
 
+/** ค่าของ `profiles.status` — enum `account_status` ใน migration 022a */
+export const STATUS_VALUES = ['pending', 'approved', 'rejected'] as const
+
+export type DenyReason = 'read-failed' | 'no-profile' | 'bad-role' | 'pending' | 'rejected'
+
 export type AccessDecision =
   | { allowed: true; role: Role }
-  | { allowed: false; reason: 'read-failed' | 'no-profile' | 'bad-role' }
+  | { allowed: false; reason: DenyReason }
 
 /**
  * @param row     แถวจาก `profiles` (null เมื่อไม่มี) — ใช้ `.maybeSingle()` เท่านั้น
@@ -39,6 +44,21 @@ export function decideAccess(row: unknown, hadError: boolean): AccessDecision {
   if (typeof role !== 'string' || !(ROLE_VALUES as readonly string[]).includes(role)) {
     return { allowed: false, reason: 'bad-role' }
   }
+
+  // **ตรวจสถานะหลัง role เสมอ** — แถวที่ข้อมูลเพี้ยนต้องถูกจับว่าเพี้ยน ไม่ใช่ถูกรายงาน
+  // ว่า "รออนุมัติ" แล้วไปโผล่ในคิวให้ผู้ดูแลกดอนุมัติบัญชีที่พัง
+  const status = (row as { status?: unknown }).status
+  if (status === 'rejected') return { allowed: false, reason: 'rejected' }
+
+  // **ทุกค่าที่ไม่ใช่ 'approved' ปิดประตู รวมถึงค่าที่ไม่มีเลย** หลักเดียวกับ
+  // `ROLE_RANK[unknown] ?? 0` ใน hasRole — ถ้าให้ status ที่หายไปแปลว่าผ่าน
+  // วันไหนมีคนลืม `.select('status')` ทุกคนจะเข้าได้หมดโดยไม่มีสัญญาณใดเลย
+  // ซึ่งเป็นความพังชนิดที่หาสาเหตุยากที่สุด
+  //
+  // ค่าที่อยู่นอก enum ไปรวมกับ 'pending' โดยตั้งใจ — คอลัมน์เป็น enum ที่ not null
+  // ค่านอกรายการจึงเกิดจากฐานข้อมูลจริงไม่ได้ เหลือแต่ทางเทสต์
+  if (status !== 'approved') return { allowed: false, reason: 'pending' }
+
   return { allowed: true, role: role as Role }
 }
 
@@ -47,7 +67,18 @@ export function decideAccess(row: unknown, hadError: boolean): AccessDecision {
  * บัญชีที่ไม่มีโปรไฟล์กู้เองไม่ได้ ต้องให้ผู้ดูแลระบบจัดการ การบอกให้ "ลองใหม่"
  * จึงผิด เพราะลองอีกกี่ครั้งก็เหมือนเดิม
  */
-export function accessDeniedMessage(reason: 'read-failed' | 'no-profile' | 'bad-role'): string {
+export function accessDeniedMessage(reason: DenyReason): string {
   if (reason === 'read-failed') return 'ระบบขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง'
+
+  // **สองสถานะนี้ต้องเป็นคนละข้อความ** เพราะผู้ใช้ต้องทำคนละอย่าง — คนที่รออนุมัติ
+  // รอต่อได้และมีโอกาสได้ใช้ ส่วนคนที่ถูกปฏิเสธรอไปก็ไม่มีอะไรเปลี่ยน ต้องติดต่อคน
+  // ข้อความรวมที่ใช้ได้ทั้งสองกรณีจะทำให้ฝ่ายหนึ่งรอเก้อเสมอ
+  if (reason === 'pending') {
+    return 'บัญชีนี้รอการอนุมัติจากผู้ดูแลระบบ กรุณาติดต่อผู้ดูแลหากรอเกินสมควร'
+  }
+  if (reason === 'rejected') {
+    return 'บัญชีนี้ไม่ได้รับอนุมัติให้ใช้งาน กรุณาติดต่อผู้ดูแลระบบ'
+  }
+
   return 'บัญชีนี้ยังไม่ได้ตั้งค่าในระบบ กรุณาติดต่อผู้ดูแลระบบ'
 }
