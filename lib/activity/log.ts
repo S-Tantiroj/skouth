@@ -17,6 +17,9 @@ export type Action =
   | 'role_change'
   // เจ้าของข้อมูลใช้สิทธิ์ลบข้อมูลประเมินตัวเอง (PDPA มาตรา 33)
   | 'self_data_delete'
+  // อนุมัติ/ปฏิเสธบัญชีที่สมัครเข้ามา (migration 022a) — เป็นการเปิดประตูเข้าระบบ
+  // จึงอยู่ระดับเดียวกับ role_change ไม่ใช่ approve/reject ซึ่งเป็นเรื่องคิวผู้สมัคร
+  | 'account_status'
 
 export type EntityType = 'candidate' | 'shortlist' | 'run' | 'user' | 'self_profile'
 
@@ -49,6 +52,7 @@ export const ACTION_LABELS: Record<Action, string> = {
   shortlist_remove: 'เอาออกจาก shortlist',
   role_change: 'เปลี่ยนสิทธิ์ผู้ใช้',
   self_data_delete: 'ลบข้อมูลประเมินตัวเอง',
+  account_status: 'เปลี่ยนสถานะบัญชี',
 }
 
 // บันทึกกิจกรรม — ห้ามทำให้งานหลักล้ม
