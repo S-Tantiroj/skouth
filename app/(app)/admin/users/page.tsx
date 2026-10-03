@@ -59,10 +59,11 @@ export default async function AdminUsers() {
               <div className="list">
                 {pending.map((u) => {
                   const secondary = identitySecondary(u)
+                  const name = identityName(u, u.id)
                   return (
                     <div key={u.id} className="list-row">
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 500 }}>{identityName(u, u.id)}</div>
+                        <div style={{ fontWeight: 500 }}>{name}</div>
                         {secondary && (
                           <div className="muted" style={{ fontSize: 12 }}>
                             {secondary}
@@ -75,7 +76,7 @@ export default async function AdminUsers() {
                           สมัครเมื่อ {String(u.created_at ?? '').slice(0, 10)}
                         </div>
                       </div>
-                      <AccountStatusActions userId={u.id} />
+                      <AccountStatusActions userId={u.id} status={u.status} label={name} />
                     </div>
                   )
                 })}
@@ -86,25 +87,32 @@ export default async function AdminUsers() {
           <div className="list">
             {rows.map((u) => {
               const secondary = identitySecondary(u)
+              const name = identityName(u, u.id)
               return (
                 <div key={u.id} className="list-row">
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 500 }}>{identityName(u, u.id)}</div>
+                    <div style={{ fontWeight: 500 }}>{name}</div>
                     {secondary && (
                       <div className="muted" style={{ fontSize: 12 }}>
                         {secondary}
                       </div>
                     )}
-                    {/* แสดงสถานะในตารางหลักด้วย เพื่อให้เห็นบัญชีที่ถูกปฏิเสธไปแล้ว
-                        และเปลี่ยนใจได้ — ถ้าเห็นแต่คิว บัญชีที่ปฏิเสธไปจะหายไปตลอดกาล
-                        โดยไม่มีทางกลับมาจากในแอป */}
-                    <div style={{ fontSize: 12, color: statusColor(u.status) }}>
-                      {statusLabel(u.status)}
-                    </div>
+                    {/* แถวที่มีสวิตช์ไม่ต้องมีป้ายนี้ เพราะสวิตช์มีป้ายของตัวเองอยู่ข้างๆ
+                        แล้ว — สถานะเดียวกันสองที่ทำให้คนไม่รู้ว่าอันไหนคือของจริงเวลา
+                        มันไม่ตรงกัน · เหลือไว้เฉพาะแถวในคิวซึ่งไม่มีสวิตช์
+                        (ปุ่มของมันอยู่ในกล่องด้านบน) */}
+                    {u.status !== 'approved' && u.status !== 'rejected' && (
+                      <div style={{ fontSize: 12, color: statusColor(u.status) }}>
+                        {statusLabel(u.status)}
+                      </div>
+                    )}
                   </div>
                   <span className="row" style={{ flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                    {/* แถวในคิวไม่ต้องมีปุ่มซ้ำ เพราะกล่องด้านบนมีอยู่แล้ว และแถวของ
+                        ตัวเองไม่มีปุ่มเพราะเซิร์ฟเวอร์ปฏิเสธอยู่แล้ว — ไม่ให้เสียเที่ยว
+                        หลักเดียวกับ isSelf ของ RoleSelect */}
                     {u.status !== 'pending' && u.id !== session.userId && (
-                      <AccountStatusActions userId={u.id} />
+                      <AccountStatusActions userId={u.id} status={u.status} label={name} />
                     )}
                     <RoleSelect userId={u.id} role={u.role} isSelf={u.id === session.userId} />
                   </span>
