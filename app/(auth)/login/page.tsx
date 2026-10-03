@@ -30,7 +30,7 @@ export default function Login() {
     if (uid) {
       const { data: p, error: readError } = await sb
         .from('profiles')
-        .select('role')
+        .select('role, status')
         .eq('id', uid)
         .maybeSingle()
       const decision = decideAccess(p, !!readError)

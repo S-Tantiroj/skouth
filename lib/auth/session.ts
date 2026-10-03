@@ -42,7 +42,7 @@ export async function getSession(): Promise<{ userId: string; role: Role } | nul
 
   const { data: p, error } = await supabase
     .from('profiles')
-    .select('role')
+    .select('role, status')
     .eq('id', user.id)
     .maybeSingle()
 
