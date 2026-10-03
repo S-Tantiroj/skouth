@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { getBrowserClient } from '@/lib/supabase/client'
 import { hasAuthError } from '@/lib/auth/signupFlow'
+import { accessDeniedMessage, decideAccess } from '@/lib/auth/profileGate'
 
 // หน้าพักหลังผู้ใช้กดลิงก์ยืนยันอีเมล
 //
@@ -13,17 +14,44 @@ import { hasAuthError } from '@/lib/auth/signupFlow'
 // รอให้ createBrowserClient เขียน session ลง cookie เสร็จ แล้วค่อยพาไป /dashboard
 export default function ConfirmEmail() {
   const [failed, setFailed] = useState(false)
+  const [blocked, setBlocked] = useState('')
 
   useEffect(() => {
     const db = getBrowserClient()
     let done = false
 
+    // **ห้าม redirect ก่อนรู้สถานะบัญชี** — ตั้งแต่ migration 022a บัญชีใหม่เกิดมาเป็น
+    // `pending` การพาไป /dashboard ทันทีจะทำให้ `getSession()` ฝั่งเซิร์ฟเวอร์คืน null
+    // แล้ว layout เด้งกลับไป /login โดยไม่มีอะไรบอกว่าเกิดอะไรขึ้น
+    // **คนที่เพิ่งยืนยันอีเมลสำเร็จจะเห็นแค่หน้าล็อกอินเปล่าๆ** แล้วสรุปว่าการยืนยันล้มเหลว
+    // ทั้งที่มันสำเร็จแล้วจริง — เป็นความเข้าใจผิดที่ทำให้เขาสมัครใหม่ซ้ำๆ โดยไม่มีประโยชน์
+    //
     // ใช้ full page load ไม่ใช่ router.push เพื่อให้ server อ่าน cookie ใหม่
     // มิฉะนั้น middleware จะยังเห็น request ที่ไม่มี session
-    const go = () => {
+    const proceed = async (userId: string) => {
       if (done) return
+      // ตั้งก่อนเริ่มอ่าน ไม่ใช่หลังอ่านเสร็จ — ไม่งั้น timer 8 วินาทีอาจยิงกลางทาง
+      // แล้วเด้งไป /login ทับข้อความที่กำลังจะแสดง
       done = true
-      window.location.href = '/dashboard'
+
+      const { data: p, error } = await db
+        .from('profiles')
+        .select('role, status')
+        .eq('id', userId)
+        .maybeSingle()
+
+      const decision = decideAccess(p, !!error)
+      if (decision.allowed) {
+        window.location.href = '/dashboard'
+        return
+      }
+
+      // ออกจากระบบก่อนแสดงข้อความ ด้วยเหตุผลเดียวกับหน้า /login — คุกกี้ที่ค้างไว้
+      // ทำให้ผู้ใช้อยู่ในสถานะ "ล็อกอินอยู่แต่ทำอะไรไม่ได้" ซึ่งอธิบายยากกว่าการไม่ได้ล็อกอิน
+      // (signOut ทำให้ onAuthStateChange ยิงด้วย session = null ซึ่ง handler ข้างล่าง
+      //  ไม่สนใจ จึงไม่วนกลับมาที่นี่)
+      await db.auth.signOut()
+      setBlocked(accessDeniedMessage(decision.reason))
     }
 
     // ลิงก์หมดอายุหรือถูกใช้ไปแล้ว Supabase จะส่ง error กลับมาใน query หรือ fragment
@@ -34,11 +62,11 @@ export default function ConfirmEmail() {
 
     // session อาจถูกสร้างเสร็จก่อน listener จะติด จึงต้องเช็คตรงๆ ด้วย
     db.auth.getSession().then(({ data: { session } }) => {
-      if (session) go()
+      if (session?.user) void proceed(session.user.id)
     })
 
     const { data: sub } = db.auth.onAuthStateChange((_event, session) => {
-      if (session) go()
+      if (session?.user) void proceed(session.user.id)
     })
 
     // ถ้าเกินเวลานี้แล้วยังไม่มี session ให้ถอยไปหน้า login แบบไม่ให้ผู้ใช้ค้าง
@@ -77,6 +105,21 @@ export default function ConfirmEmail() {
             </ul>
             <a href="/login">ไปหน้าเข้าสู่ระบบ</a>
             <a href="/signup">สมัครด้วยอีเมลเดิมเพื่อรับลิงก์ใหม่</a>
+          </>
+        ) : blocked ? (
+          <>
+            {/* **หัวข้อต้องยืนยันว่าการยืนยันอีเมลสำเร็จ** ไม่ใช่ขึ้นแต่ข้อความปฏิเสธ
+                ผู้ใช้เพิ่งกดลิงก์จากอีเมลมา ถ้าเห็นแต่ "บัญชีนี้รอการอนุมัติ" เขาจะไม่รู้ว่า
+                ขั้นตอนที่เพิ่งทำผ่านแล้วหรือไม่ แล้วกดลิงก์เดิมซ้ำ (ซึ่งใช้ไม่ได้อีก)
+                หรือสมัครใหม่ — สองอย่างที่ไม่ช่วยอะไรและทำให้เขาคิดว่าระบบพัง */}
+            <h1 style={{ margin: 0 }}>ยืนยันอีเมลเรียบร้อยแล้ว</h1>
+            <p style={{ color: 'var(--bad)', margin: 0 }}>{blocked}</p>
+            <p className="muted" style={{ margin: 0 }}>
+              เมื่อได้รับอนุมัติแล้ว เข้าสู่ระบบด้วยอีเมลและรหัสผ่านเดิมได้ทันที
+              ไม่ต้องสมัครใหม่
+            </p>
+            <a href="/login">ไปหน้าเข้าสู่ระบบ</a>
+            <a href="/" className="faint">← กลับหน้าแรก</a>
           </>
         ) : (
           <>
