@@ -123,6 +123,26 @@ Full spec and plan live in `docs/superpowers/`:
   เทสต์อยู่ที่ `019_lock_profile_columns.int.test.ts` — **สร้างบัญชีจริงแล้วล็อกอินด้วย
   anon key ยิง PostgREST ตรงๆ** ไม่ใช่ตรวจว่าหน้าจอมีช่องให้แก้หรือไม่ เพราะช่องโหว่
   ไม่ได้อยู่ที่หน้าจอ และตรวจค่าในฐานซ้ำ ไม่เชื่อค่า `error` อย่างเดียว
+- **`profiles.status` คือประตูเข้าระบบ บัญชีใหม่เกิดมาเป็น `pending`** (migration 022a)
+  enum `account_status` = `pending` | `approved` | `rejected` ค่าตั้งต้นของคอลัมน์คือ
+  `pending` **จึงไม่ต้องแก้ trigger `handle_new_user()` เลย** (มันใส่แค่ id/display_name/role)
+  **ลำดับสามบรรทัดใน migration สลับไม่ได้** — `add column` ก่อน แล้ว `update ... set
+  status = 'approved'` ทีหลัง ถ้ากลับลำดับ **ทุกบัญชีที่มีอยู่รวมถึงแอดมินจะกลายเป็น
+  `pending` แล้วไม่เหลือใครเข้าระบบไปอนุมัติให้ใคร** กู้ได้ทางเดียวคือ SQL editor
+  **ห้ามเพิ่ม `status` เข้า `grant update (...)` ของ migration 019 เด็ดขาด** —
+  ใส่เมื่อไรผู้ใช้จะยิง `PATCH /rest/v1/profiles?id=eq.<ตัวเอง>` ด้วย `{"status":"approved"}`
+  ผ่าน anon key แล้วอนุมัติตัวเองได้ทันที ช่องเดียวกับเรื่อง `role` ข้างบนเป๊ะ
+  ทางเดียวที่เปลี่ยนได้คือ `POST /api/admin/users/[id]/status` ซึ่งใช้ service-role
+  เทสต์อยู่ที่ `022a_account_status.int.test.ts` **ยิง PostgREST ตรงด้วย anon key**
+  และตรวจค่าในฐานซ้ำ ไม่เชื่อค่า `error` อย่างเดียว
+  **`decideAccess` ปิดประตูให้ทุกค่าที่ไม่ใช่ `approved` รวมถึงค่าที่ไม่มีเลย** —
+  หลักเดียวกับ `ROLE_RANK[unknown] ?? 0` ถ้าให้ `status` ที่หายไปแปลว่าผ่าน วันไหน
+  มีคนลืม `.select('status')` ทุกคนจะเข้าได้หมดโดยไม่มีสัญญาณใดเลย
+  **ต้องตรวจ role ก่อน status เสมอ** ไม่งั้นบัญชีที่ข้อมูลเพี้ยนจะไปโผล่ในคิวให้
+  ผู้ดูแลกดอนุมัติบัญชีที่พัง (พิสูจน์ด้วย break check แล้วว่าเทสต์จับลำดับนี้ได้จริง)
+  **`/auth/confirm` ห้าม redirect ก่อนรู้สถานะ** — คนที่เพิ่งยืนยันอีเมลสำเร็จจะถูก
+  `getSession()` ตีกลับไป `/login` โดยไม่มีอะไรบอก แล้วสรุปว่าการยืนยันล้มเหลว
+  ทั้งที่มันสำเร็จแล้วจริง หน้านั้นจึงอ่าน `status` เองแล้วแสดงข้อความแทนการเด้ง
 - **`profiles.email` คือตัวระบุตัวตน ส่วน `display_name` คือของตกแต่ง** (migration 021)
   เดิม trigger ใส่อีเมลลงช่อง `display_name` และไม่มีคอลัมน์อีเมลเลย `display_name`
   จึงเป็นที่เดียวที่แอปเห็นอีเมลได้ พอเปิดให้ผู้ใช้แก้ชื่อเอง **ที่ระบุตัวตนกลายเป็นค่า
@@ -896,7 +916,66 @@ Spec/plan: `docs/superpowers/{specs,plans}/2026-09-07-job-edit-delete*`
       `docs/thesis/2026-09-08-doc-corrections.md` พร้อม Data Dictionary ชุดจริง 17 ตาราง
       (ตาราง `jobs` ยังต้องยืนยัน DDL จาก Supabase เพราะไม่มี migration ในรีโป)
 
+### Phase 12 — อนุมัติบัญชี · Shortlist แบบติ๊ก · ซ่อนฟอร์มงาน (2026-10-03)
+Spec/plan: `docs/superpowers/{specs,plans}/2026-10-03-access-control-and-shortlist*`
+
+- [x] **Migration 022a** — `profiles.status` + ลบคอลัมน์ `shortlist_candidates.note`
+      ดูหัวข้อ `profiles.status` ข้างบน · **`note` ไม่มีโค้ดไหนอ่านหรือเขียนเลย**
+      จึงลบพร้อมกันได้โดยไม่กระทบเว็บที่ deploy อยู่
+- [x] **Migration 022b** — constraint `shortlists_name_len`
+      `check (char_length(trim(name)) between 1 and 60)` · **`trim` อยู่ข้างในโดยตั้งใจ**
+      ชื่อที่เป็นช่องว่างล้วนต้องไม่ผ่าน ไม่งั้นผู้ใช้ได้การ์ดที่ไม่มีชื่อซึ่งกดแก้กลับยาก
+      **แต่ constraint ไม่ได้ตัดช่องว่างให้** ชื่อ `" ก "` ยังถูกเก็บพร้อมช่องว่าง
+      การตัดต้องทำที่ `validateListName` ก่อนส่ง (เหตุผลเดียวกับ `normalizeDisplayName`)
+      **022b ต่างจาก 022a ตรงที่กระทบเว็บที่ deploy อยู่ทันทีที่รัน** ตาราง `shortlists`
+      ถูกใช้งานจริง และ `ALTER TABLE ADD CONSTRAINT` ตรวจแถวเดิมด้วย — **ต้องรัน
+      `select ... where char_length(trim(name)) not between 1 and 60` ให้ได้ 0 แถวก่อน**
+      มีแถวผิดแม้แถวเดียว migration จะล้มทั้งไฟล์
+      ไม่มี unique constraint บนชื่อโดยตั้งใจ — ห้ามซ้ำจะทำให้คนที่พิมพ์ชื่อทั่วไป
+      อย่าง "น่าสนใจ" กดสร้างไม่ผ่านโดยไม่เข้าใจว่าทำไม
+- [x] `POST /api/admin/users/[id]/status` + คิวรออนุมัติที่ `/admin/users`
+      **แอดมินเปลี่ยนสถานะของตัวเองไม่ได้ทุกค่า** ไม่ใช่แค่ `rejected` — endpoint นี้
+      เป็นทางเดียวในแอป ปฏิเสธตัวเองแล้วถ้าเป็นแอดมินคนเดียวจะไม่เหลือใครกู้ให้
+      ข้อจำกัดเดียวกับที่ `lib/auth/roleChange.ts` บันทึกไว้: **ไม่รับประกันว่าจะเหลือ
+      แอดมินเสมอ** แอดมินสองคนที่ปฏิเสธกันและกันพร้อมกันจะผ่านทั้งคู่
+      `activity_log` รับ action `account_status` (ไม่ต้อง migration — คอลัมน์เป็น `text`)
+      **สวิตช์ในตารางหลักรับแค่ `approved`/`rejected`** ค่าอื่นตกไปทางสองปุ่มเหมือน
+      `pending` เพราะสวิตช์มีสองตำแหน่งแต่คอลัมน์มีค่าได้มากกว่าสองค่า ยัดค่าแปลก
+      เป็น "ปิด" แล้วหน้าจอจะขึ้นแดงว่า "ถูกปฏิเสธ" ทั้งที่ไม่ใช่
+- [x] `components/SaveToShortlist.tsx` แทน `AddToShortlist.tsx` (ลบแล้ว)
+      ตรรกะอยู่ที่ `lib/shortlists/saveState.ts` เพราะชุด unit รันบน `environment: 'node'`
+      ไม่มี jsdom จึง render React ไม่ได้ (รูปแบบเดียวกับ `buildTimeline` ใน `Timeline.tsx`)
+      **`planToggle` รวมการตัดสินสามเรื่องไว้ที่เดียว** (ค้างอยู่ไหม · อยู่ในรายการแล้วไหม ·
+      จะทำอะไร) เหตุผลที่ต้องกันการกดซ้ำไม่ใช่คีย์ซ้ำ — `upsert` กันอยู่แล้ว — แต่เป็น
+      **ลำดับ**: add กับ remove วิ่งพร้อมกันแล้วผลขึ้นกับว่าอันไหนถึงฐานก่อน
+      ซึ่งไม่ตรงกับหน้าจอเสมอไป · **ไม่เปลี่ยนหน้าจอก่อนคำขอสำเร็จ** (บทเรียน `RoleSelect`)
+      **คอมโพเนนต์ไม่ดึงข้อมูลเอง** — หน้าผลการค้นหามีได้หลายสิบแถว ผู้เรียกดึงทีเดียว
+      ผ่าน `lib/shortlists/useShortlistData.ts` แล้วแจกจ่าย
+- [x] **`{canCreate && <JobForm />}` ที่ `/jobs`** — หน้านี้เคยแสดงฟอร์มให้ทุกคน
+      ทั้งที่ `POST /api/jobs` กั้น `data_manager` `member` จึงกรอกจนครบแล้วถูกปฏิเสธ
+      **ไม่ใช่การเพิ่มด่าน** ด่านจริงอยู่ที่ route และมีเทสต์ครอบอยู่แล้ว
+      ข้อความตอนไม่มีงานแยกตามสิทธิ์ด้วย — "เพิ่มงานด้านบนได้เลย" ชี้ไปที่ฟอร์มที่
+      `member` มองไม่เห็น **การบอกให้ทำสิ่งที่ทำไม่ได้แย่กว่าไม่บอกอะไรเลย**
+
+- **กับดัก: server component ที่อ่าน `shortlists` ต้องใส่ `.eq('owner_id', ...)` เอง**
+  `app/(app)/candidates/[id]/page.tsx` ใช้ `getServerClient()` ซึ่ง **bypass RLS**
+  ตัวเดิม `AddToShortlist` ดึงเองด้วย anon key ที่ RLS กรองเจ้าของให้อัตโนมัติ
+  **การย้ายมาดึงฝั่งเซิร์ฟเวอร์จึงถอดด่านนั้นออกโดยไม่มี error ไม่มีคำเตือน**
+  ลืมแล้วทุกคนเห็น Shortlist ของคนอื่นทั้งระบบ · `shortlist_candidates`
+  **ไม่มีคอลัมน์เจ้าของเลย** มีแต่ `shortlist_id` จึงต้องจำกัดด้วย `.in()` อีกชั้น
+  ส่วน `lib/shortlists/useShortlistData.ts` ใช้ anon key ได้เพราะผู้เรียกเป็น
+  client component — **อย่าเอารูปแบบหนึ่งไปใช้แทนอีกแบบ**
+- **การกรอง `owner_id` ที่หน้าผู้สมัครไม่มีเทสต์ครอบเลย** (พิสูจน์ด้วย break check
+  2026-10-03 — ถอดออกแล้วเทสต์ทั้งโปรเจกต์ยังเขียว 551/551)
+  **ร้ายแรงเพราะมันคือการควบคุมการเข้าถึง ไม่ใช่การกรองเพื่อความสวยงาม** และ
+  การรั่วแบบนี้ไม่ทิ้งร่องรอยอะไรเลย — รูปแบบเดียวกับ
+  `app/api/self-assessment/[id]/score/route.ts` ที่บันทึกไว้ข้างบน
+  ด่านเดียวที่ตรวจอยู่ตอนนี้คือการเปิดหน้าดูด้วยสองบัญชี
+
 ### Not done / deliberately deferred
+- **เฟส 4 ของแผน 2026-10-03: แจ้งเตือนอีเมลตอนอนุมัติ/ปฏิเสธ** — เขียนไว้ในสเปค
+  แล้วแต่ยังไม่ลงมือ ตอนนี้ผู้ใช้ที่รออนุมัติไม่มีทางรู้ว่าได้รับอนุมัติแล้วนอกจาก
+  ลองล็อกอินเอง
 - Google sign-in — deferred from v2. Risk: an existing email/password user
   signing in with Google may get a NEW auth user (and so a new profile, role
   `member`, no access to their old shortlists) instead of a linked identity.
