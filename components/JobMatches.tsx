@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import ScoreBadge from '@/components/ScoreBadge'
+import SaveToShortlist from '@/components/SaveToShortlist'
+import { useShortlistData } from '@/lib/shortlists/useShortlistData'
 
 type Match = { id: string; full_name: string; headline?: string; score: number }
 type Deep = { score: number; reasoning: string }
@@ -19,6 +21,10 @@ export default function JobMatches({ jobId }: { jobId: string }) {
       setLoading(false)
     })()
   }, [jobId])
+
+  // **ต้องอยู่เหนือ `if (loading) return`** — hook เรียกหลัง early return ไม่ได้
+  // ตอน rows ยังว่าง hook จะดึงแค่รายการ Shortlist ซึ่งก็เป็นสิ่งที่ต้องใช้อยู่แล้ว
+  const { lists, memberships, reload } = useShortlistData(rows.map((c) => c.id))
 
   const analyze = async (candidateId: string) => {
     setDeep((d) => ({ ...d, [candidateId]: 'loading' }))
@@ -44,9 +50,18 @@ export default function JobMatches({ jobId }: { jobId: string }) {
               <ScoreBadge score={c.score} />
               <Link href={`/candidates/${c.id}`} style={{ fontWeight: 500 }}>{c.full_name}</Link>
               <span className="muted">{c.headline}</span>
-              <button className="btn" style={{ marginLeft: 'auto' }} onClick={() => analyze(c.id)} disabled={d === 'loading'}>
-                {d === 'loading' ? 'กำลังวิเคราะห์…' : 'วิเคราะห์เชิงลึก'}
-              </button>
+              <span className="row" style={{ marginLeft: 'auto' }}>
+                <button className="btn" onClick={() => analyze(c.id)} disabled={d === 'loading'}>
+                  {d === 'loading' ? 'กำลังวิเคราะห์…' : 'วิเคราะห์เชิงลึก'}
+                </button>
+                <SaveToShortlist
+                  candidateId={c.id}
+                  candidateName={c.full_name}
+                  lists={lists}
+                  memberOf={memberships[c.id] ?? []}
+                  onChange={reload}
+                />
+              </span>
             </div>
             {d && d !== 'loading' && (
               <div className="row" style={{ marginTop: 8, marginLeft: 44, fontSize: 14, alignItems: 'flex-start' }}>

@@ -7,6 +7,8 @@ import CoverageStrip from '@/components/CoverageStrip'
 import type { ChipFilters } from '@/lib/search/extractFilters'
 import { mergeAiFilters, reconcileAfterUserEdit, NO_AI_FILTERS, type AiOwned } from '@/lib/search/mergeFilters'
 import { countActiveFilters, describeFilters } from '@/lib/search/describeFilters'
+import SaveToShortlist from '@/components/SaveToShortlist'
+import { useShortlistData } from '@/lib/shortlists/useShortlistData'
 
 export default function SearchPage() {
   const [nl, setNl] = useState('')
@@ -107,6 +109,7 @@ export default function SearchPage() {
   }
 
   const activeFilters = countActiveFilters(filters)
+  const { lists, memberships, reload } = useShortlistData(res.map((c) => c.id))
 
   return (
     <main>
@@ -199,14 +202,38 @@ export default function SearchPage() {
       )}
       <div className="stack">
         {res.map((c) => (
-          <Link key={c.id} href={`/candidates/${c.id}`} className="result-row" style={{ color: 'inherit' }}>
-            <ScoreBadge score={c.score} />
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 500 }}>{c.full_name}</div>
-              <div className="muted" style={{ fontSize: 12 }}>{c.headline}</div>
-            </div>
-            <span className="faint">›</span>
-          </Link>
+          /* **`<Link>` ครอบแค่ส่วนข้อความ ไม่ใช่ทั้งแถวเหมือนเดิม** — ปุ่มบันทึกมี
+             แผงเลื่อนลงอยู่ข้างใน การวางปุ่มและแผงไว้ใน `<a>` เป็น HTML ที่ไม่ถูกต้อง
+             (interactive ซ้อน interactive) และเบราว์เซอร์จัดการต่างกัน
+             `stopPropagation` อย่างเดียวจึงไม่พอ ต้องแยกโครงออกจากกันจริงๆ */
+          <div key={c.id} className="result-row">
+            <Link
+              href={`/candidates/${c.id}`}
+              style={{
+                color: 'inherit',
+                textDecoration: 'none',
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                minWidth: 0,
+              }}
+            >
+              <ScoreBadge score={c.score} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 500 }}>{c.full_name}</div>
+                <div className="muted" style={{ fontSize: 12 }}>{c.headline}</div>
+              </div>
+              <span className="faint">›</span>
+            </Link>
+            <SaveToShortlist
+              candidateId={c.id}
+              candidateName={c.full_name}
+              lists={lists}
+              memberOf={memberships[c.id] ?? []}
+              onChange={reload}
+            />
+          </div>
         ))}
       </div>
       {ran && !searching && !err && res.length === 0 && <p className="faint">ไม่พบผู้สมัคร</p>}
