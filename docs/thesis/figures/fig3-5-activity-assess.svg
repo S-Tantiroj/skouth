@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="992" height="1030" viewBox="0 0 992 1030"><rect width="992" height="1030" fill="#fff"/>
+<rect x="14" y="14" width="300" height="40" fill="#e6e6e6" stroke="#000" stroke-width="1.5"/>
+<text x="164.0" y="35.0" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="21" font-weight="bold" text-anchor="middle" dominant-baseline="middle">ผู้ใช้</text>
+<rect x="14" y="14" width="300" height="1016" fill="none" stroke="#000" stroke-width="1.5"/>
+<rect x="314" y="14" width="664" height="40" fill="#e6e6e6" stroke="#000" stroke-width="1.5"/>
+<text x="646.0" y="35.0" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="21" font-weight="bold" text-anchor="middle" dominant-baseline="middle">ระบบ</text>
+<rect x="314" y="14" width="664" height="1016" fill="none" stroke="#000" stroke-width="1.5"/>
+<polyline points="164.0,102.0 164.0,136.0" fill="none" stroke="#000" stroke-width="1.4"/>
+<polygon points="164.0,136.0 158.5,125.0 169.5,125.0" fill="#000"/>
+<polyline points="164.0,173.0 164.0,207.0" fill="none" stroke="#000" stroke-width="1.4"/>
+<polygon points="164.0,207.0 158.5,196.0 169.5,196.0" fill="#000"/>
+<polyline points="164.0,265.0 164.0,283.0 464.0,283.0 464.0,299.0" fill="none" stroke="#000" stroke-width="1.4"/>
+<polygon points="464.0,299.0 458.5,288.0 469.5,288.0" fill="#000"/>
+<polyline points="464.0,357.0 464.0,391.0" fill="none" stroke="#000" stroke-width="1.4"/>
+<polygon points="464.0,391.0 458.5,380.0 469.5,380.0" fill="#000"/>
+<polyline points="464.0,563.0 464.0,597.0" fill="none" stroke="#000" stroke-width="1.4"/>
+<polygon points="464.0,597.0 458.5,586.0 469.5,586.0" fill="#000"/>
+<polyline points="889.0,637.0 933.0,637.0" fill="none" stroke="#000" stroke-width="1.4"/>
+<polygon points="933.0,637.0 922.0,642.5 922.0,631.5" fill="#000"/>
+<polyline points="464.0,769.0 464.0,803.0" fill="none" stroke="#000" stroke-width="1.4"/>
+<polygon points="464.0,803.0 458.5,792.0 469.5,792.0" fill="#000"/>
+<polyline points="464.0,861.0 464.0,879.0 164.0,879.0 164.0,895.0" fill="none" stroke="#000" stroke-width="1.4"/>
+<polygon points="164.0,895.0 158.5,884.0 169.5,884.0" fill="#000"/>
+<polyline points="164.0,932.0 164.0,966.0" fill="none" stroke="#000" stroke-width="1.4"/>
+<polygon points="164.0,966.0 158.5,955.0 169.5,955.0" fill="#000"/>
+<polyline points="559.0,431.0 639.0,431.0" fill="none" stroke="#000" stroke-width="1.4"/>
+<polygon points="639.0,431.0 628.0,436.5 628.0,425.5" fill="#000"/>
+<text x="565.0" y="419.0" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="15" text-anchor="start" dominant-baseline="middle" fill="#000">[เคย]</text>
+<polyline points="464.0,471.0 464.0,505.0" fill="none" stroke="#000" stroke-width="1.4"/>
+<polygon points="464.0,505.0 458.5,494.0 469.5,494.0" fill="#000"/>
+<text x="456.0" y="487.0" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="15" text-anchor="end" dominant-baseline="middle" fill="#000">[ยังไม่เคย]</text>
+<polyline points="559.0,637.0 639.0,637.0" fill="none" stroke="#000" stroke-width="1.4"/>
+<polygon points="639.0,637.0 628.0,642.5 628.0,631.5" fill="#000"/>
+<text x="565.0" y="625.0" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="15" text-anchor="start" dominant-baseline="middle" fill="#000">[ไม่ตอบ]</text>
+<polyline points="464.0,677.0 464.0,711.0" fill="none" stroke="#000" stroke-width="1.4"/>
+<polygon points="464.0,711.0 458.5,700.0 469.5,700.0" fill="#000"/>
+<text x="456.0" y="693.0" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="15" text-anchor="end" dominant-baseline="middle" fill="#000">[ตอบ]</text>
+<polyline points="889.0,431.0 968.0,431.0 968.0,832.0 589.0,832.0" fill="none" stroke="#000" stroke-width="1.4"/>
+<polygon points="589.0,832.0 600.0,826.5 600.0,837.5" fill="#000"/>
+<circle cx="164.0" cy="89.0" r="12" fill="#000"/>
+<rect x="39.0" y="136.0" width="250" height="37" rx="14" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<text x="164.0" y="155.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">เปิดหน้ารายละเอียดผู้สมัคร</text>
+<rect x="39.0" y="207.0" width="250" height="58" rx="14" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<text x="164.0" y="226.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">กรอกความต้องการของตำแหน่งงาน</text>
+<text x="164.0" y="247.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">แล้วกดประเมิน</text>
+<rect x="339.0" y="299.0" width="250" height="58" rx="14" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<text x="464.0" y="318.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">คำนวณค่าแฮช</text>
+<text x="464.0" y="339.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">ของข้อความความต้องการ</text>
+<polygon points="464.0,391.0 559.0,431.0 464.0,471.0 369.0,431.0" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<text x="464.0" y="423.0" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="14" text-anchor="middle" dominant-baseline="middle">เคยประเมินด้วย</text>
+<text x="464.0" y="441.0" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="14" text-anchor="middle" dominant-baseline="middle">ความต้องการนี้หรือไม่</text>
+<rect x="639.0" y="402.0" width="250" height="58" rx="14" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<text x="764.0" y="421.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">คืนผลเดิม</text>
+<text x="764.0" y="442.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">โดยไม่เรียก AI</text>
+<rect x="339.0" y="505.0" width="250" height="58" rx="14" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<text x="464.0" y="524.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">ส่งข้อมูลผู้สมัคร</text>
+<text x="464.0" y="545.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">และความต้องการให้ AI ประเมิน</text>
+<polygon points="464.0,597.0 559.0,637.0 464.0,677.0 369.0,637.0" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<text x="464.0" y="629.0" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="14" text-anchor="middle" dominant-baseline="middle">AI ตอบภายในเวลา</text>
+<text x="464.0" y="647.0" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="14" text-anchor="middle" dominant-baseline="middle">ที่กำหนดหรือไม่</text>
+<rect x="639.0" y="608.0" width="250" height="58" rx="14" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<text x="764.0" y="627.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">แจ้งให้ลองใหม่</text>
+<text x="764.0" y="648.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">และไม่บันทึกผล</text>
+<circle cx="946.0" cy="637.0" r="13" fill="#fff" stroke="#000" stroke-width="2"/><circle cx="946.0" cy="637.0" r="8" fill="#000"/>
+<rect x="339.0" y="711.0" width="250" height="58" rx="14" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<text x="464.0" y="730.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">บันทึกคะแนนและเหตุผล</text>
+<text x="464.0" y="751.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">เพื่อใช้ซ้ำ</text>
+<rect x="339.0" y="803.0" width="250" height="58" rx="14" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<text x="464.0" y="822.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">แสดงคะแนน 0–100</text>
+<text x="464.0" y="843.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">และเหตุผลภาษาไทย</text>
+<rect x="39.0" y="895.0" width="250" height="37" rx="14" fill="#fff" stroke="#000" stroke-width="1.6"/>
+<text x="164.0" y="914.5" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" text-anchor="middle" dominant-baseline="middle">อ่านผลการประเมิน</text>
+<circle cx="164.0" cy="979.0" r="13" fill="#fff" stroke="#000" stroke-width="2"/><circle cx="164.0" cy="979.0" r="8" fill="#000"/>
+</svg>

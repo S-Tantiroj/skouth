@@ -1,0 +1,341 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1430" height="840" viewBox="0 0 1430 840"><rect width="1430" height="840" fill="#fff"/>
+<rect x="40" y="30" width="250" height="45" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<rect x="40" y="30" width="250" height="26" fill="#e6e6e6" stroke="#000" stroke-width="1.3"/>
+<text x="165.0" y="47.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">auth.users</text>
+<line x1="86" y1="56" x2="86" y2="75" stroke="#000" stroke-width="0.8"/>
+<text x="46" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK</text>
+<text x="92" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="284" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="40" y="90" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-style="italic" fill="#444">Supabase Auth schema (passwords are stored here)</text>
+<rect x="40" y="130" width="250" height="159" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<rect x="40" y="130" width="250" height="26" fill="#e6e6e6" stroke="#000" stroke-width="1.3"/>
+<text x="165.0" y="147.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">profiles</text>
+<line x1="86" y1="156" x2="86" y2="289" stroke="#000" stroke-width="0.8"/>
+<text x="46" y="169.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK/FK</text>
+<text x="92" y="169.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="284" y="169.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="46" y="188.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="92" y="188.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">display_name</text>
+<text x="284" y="188.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="46" y="207.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="92" y="207.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">role</text>
+<text x="284" y="207.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">user_role</text>
+<text x="46" y="226.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="92" y="226.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">settings</text>
+<text x="284" y="226.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">jsonb</text>
+<text x="46" y="245.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="92" y="245.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">created_at</text>
+<text x="284" y="245.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">timestamptz</text>
+<text x="46" y="264.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="92" y="264.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">email</text>
+<text x="284" y="264.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="46" y="283.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="92" y="283.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">status</text>
+<text x="284" y="283.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">account_status</text>
+<rect x="40" y="400" width="250" height="102" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<rect x="40" y="400" width="250" height="26" fill="#e6e6e6" stroke="#000" stroke-width="1.3"/>
+<text x="165.0" y="417.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">shortlists</text>
+<line x1="86" y1="426" x2="86" y2="502" stroke="#000" stroke-width="0.8"/>
+<text x="46" y="439.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK</text>
+<text x="92" y="439.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="284" y="439.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="46" y="458.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="92" y="458.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">name</text>
+<text x="284" y="458.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="46" y="477.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">FK</text>
+<text x="92" y="477.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">owner_id</text>
+<text x="284" y="477.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="46" y="496.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="92" y="496.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">created_at</text>
+<text x="284" y="496.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">timestamptz</text>
+<rect x="40" y="560" width="250" height="64" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<rect x="40" y="560" width="250" height="26" fill="#e6e6e6" stroke="#000" stroke-width="1.3"/>
+<text x="165.0" y="577.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">shortlist_candidates</text>
+<line x1="86" y1="586" x2="86" y2="624" stroke="#000" stroke-width="0.8"/>
+<text x="46" y="599.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK/FK</text>
+<text x="92" y="599.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">shortlist_id</text>
+<text x="284" y="599.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="46" y="618.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK/FK</text>
+<text x="92" y="618.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">candidate_id</text>
+<text x="284" y="618.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<rect x="400" y="30" width="250" height="387" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<rect x="400" y="30" width="250" height="26" fill="#e6e6e6" stroke="#000" stroke-width="1.3"/>
+<text x="525.0" y="47.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">candidates</text>
+<line x1="446" y1="56" x2="446" y2="417" stroke="#000" stroke-width="0.8"/>
+<text x="406" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK</text>
+<text x="452" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="644" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="406" y="88.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="88.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">full_name</text>
+<text x="644" y="88.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="406" y="107.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="107.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">photo_url</text>
+<text x="644" y="107.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="406" y="126.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="126.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">headline</text>
+<text x="644" y="126.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="406" y="145.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="145.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">location</text>
+<text x="644" y="145.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="406" y="164.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="164.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">summary</text>
+<text x="644" y="164.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="406" y="183.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="183.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">source</text>
+<text x="644" y="183.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">cand_source</text>
+<text x="406" y="202.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="202.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">raw_data</text>
+<text x="644" y="202.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">jsonb</text>
+<text x="406" y="221.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="221.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">embedding</text>
+<text x="644" y="221.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">vector(768)</text>
+<text x="406" y="240.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">FK</text>
+<text x="452" y="240.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">created_by</text>
+<text x="644" y="240.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="406" y="259.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="259.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">created_at</text>
+<text x="644" y="259.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">timestamptz</text>
+<text x="406" y="278.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="278.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">updated_at</text>
+<text x="644" y="278.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">timestamptz</text>
+<text x="406" y="297.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="297.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">years_experience</text>
+<text x="644" y="297.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">int4</text>
+<text x="406" y="316.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="316.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">linkedin_url</text>
+<text x="644" y="316.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="406" y="335.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="335.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">professional_email</text>
+<text x="644" y="335.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="406" y="354.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="354.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">refreshed_at</text>
+<text x="644" y="354.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">timestamptz</text>
+<text x="406" y="373.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">FK</text>
+<text x="452" y="373.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">ingest_run_id</text>
+<text x="644" y="373.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="406" y="392.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="392.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">embed_hash</text>
+<text x="644" y="392.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="406" y="411.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="411.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">industry</text>
+<text x="644" y="411.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<rect x="400" y="470" width="250" height="178" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<rect x="400" y="470" width="250" height="26" fill="#e6e6e6" stroke="#000" stroke-width="1.3"/>
+<text x="525.0" y="487.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">analyses</text>
+<line x1="446" y1="496" x2="446" y2="648" stroke="#000" stroke-width="0.8"/>
+<text x="406" y="509.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK</text>
+<text x="452" y="509.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="644" y="509.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="406" y="528.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">FK</text>
+<text x="452" y="528.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">candidate_id</text>
+<text x="644" y="528.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="406" y="547.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="547.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">requirement_text</text>
+<text x="644" y="547.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="406" y="566.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="566.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">requirement_hash</text>
+<text x="644" y="566.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="406" y="585.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="585.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">score</text>
+<text x="644" y="585.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">int4</text>
+<text x="406" y="604.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="604.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">reasoning</text>
+<text x="644" y="604.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="406" y="623.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="452" y="623.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">created_at</text>
+<text x="644" y="623.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">timestamptz</text>
+<text x="406" y="642.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">FK</text>
+<text x="452" y="642.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">job_id</text>
+<text x="644" y="642.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<rect x="790" y="30" width="250" height="178" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<rect x="790" y="30" width="250" height="26" fill="#e6e6e6" stroke="#000" stroke-width="1.3"/>
+<text x="915.0" y="47.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">education</text>
+<line x1="836" y1="56" x2="836" y2="208" stroke="#000" stroke-width="0.8"/>
+<text x="796" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK</text>
+<text x="842" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="1034" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="796" y="88.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">FK</text>
+<text x="842" y="88.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">candidate_id</text>
+<text x="1034" y="88.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="796" y="107.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="107.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">institution</text>
+<text x="1034" y="107.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="796" y="126.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="126.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">country</text>
+<text x="1034" y="126.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="796" y="145.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="145.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">degree</text>
+<text x="1034" y="145.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="796" y="164.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="164.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">field_of_study</text>
+<text x="1034" y="164.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="796" y="183.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="183.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">start_year</text>
+<text x="1034" y="183.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">int4</text>
+<text x="796" y="202.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="202.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">end_year</text>
+<text x="1034" y="202.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">int4</text>
+<rect x="790" y="230" width="250" height="159" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<rect x="790" y="230" width="250" height="26" fill="#e6e6e6" stroke="#000" stroke-width="1.3"/>
+<text x="915.0" y="247.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">experience</text>
+<line x1="836" y1="256" x2="836" y2="389" stroke="#000" stroke-width="0.8"/>
+<text x="796" y="269.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK</text>
+<text x="842" y="269.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="1034" y="269.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="796" y="288.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">FK</text>
+<text x="842" y="288.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">candidate_id</text>
+<text x="1034" y="288.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="796" y="307.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="307.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">company</text>
+<text x="1034" y="307.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="796" y="326.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="326.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">title</text>
+<text x="1034" y="326.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="796" y="345.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="345.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">start_date</text>
+<text x="1034" y="345.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">date</text>
+<text x="796" y="364.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="364.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">end_date</text>
+<text x="1034" y="364.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">date</text>
+<text x="796" y="383.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="383.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">description</text>
+<text x="1034" y="383.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<rect x="790" y="410" width="250" height="64" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<rect x="790" y="410" width="250" height="26" fill="#e6e6e6" stroke="#000" stroke-width="1.3"/>
+<text x="915.0" y="427.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">candidate_skills</text>
+<line x1="836" y1="436" x2="836" y2="474" stroke="#000" stroke-width="0.8"/>
+<text x="796" y="449.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK/FK</text>
+<text x="842" y="449.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">candidate_id</text>
+<text x="1034" y="449.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="796" y="468.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK/FK</text>
+<text x="842" y="468.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">skill_id</text>
+<text x="1034" y="468.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<rect x="1140" y="410" width="250" height="64" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<rect x="1140" y="410" width="250" height="26" fill="#e6e6e6" stroke="#000" stroke-width="1.3"/>
+<text x="1265.0" y="427.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">skills</text>
+<line x1="1186" y1="436" x2="1186" y2="474" stroke="#000" stroke-width="0.8"/>
+<text x="1146" y="449.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK</text>
+<text x="1192" y="449.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="1384" y="449.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="1146" y="468.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">UQ</text>
+<text x="1192" y="468.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">name</text>
+<text x="1384" y="468.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<rect x="790" y="540" width="250" height="273" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<rect x="790" y="540" width="250" height="26" fill="#e6e6e6" stroke="#000" stroke-width="1.3"/>
+<text x="915.0" y="557.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">jobs</text>
+<line x1="836" y1="566" x2="836" y2="813" stroke="#000" stroke-width="0.8"/>
+<text x="796" y="579.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK</text>
+<text x="842" y="579.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="1034" y="579.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
+<text x="796" y="598.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="598.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">title</text>
+<text x="1034" y="598.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">varchar(255)</text>
+<text x="796" y="617.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="617.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">company</text>
+<text x="1034" y="617.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">varchar(255)</text>
+<text x="796" y="636.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="636.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">description</text>
+<text x="1034" y="636.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="796" y="655.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="655.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">required_skills</text>
+<text x="1034" y="655.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text[]</text>
+<text x="796" y="674.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="674.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">min_experience_years</text>
+<text x="1034" y="674.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">int4</text>
+<text x="796" y="693.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="693.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">location</text>
+<text x="1034" y="693.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">varchar(255)</text>
+<text x="796" y="712.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="712.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">category</text>
+<text x="1034" y="712.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">varchar(255)</text>
+<text x="796" y="731.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="731.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">redirect_url</text>
+<text x="1034" y="731.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">text</text>
+<text x="796" y="750.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">UQ</text>
+<text x="842" y="750.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">source</text>
+<text x="1034" y="750.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">varchar(100)</text>
+<text x="796" y="769.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">UQ</text>
+<text x="842" y="769.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">external_id</text>
+<text x="1034" y="769.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">varchar(255)</text>
+<text x="796" y="788.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="788.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">embedding</text>
+<text x="1034" y="788.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">vector(768)</text>
+<text x="796" y="807.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
+<text x="842" y="807.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">created_at</text>
+<text x="1034" y="807.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">timestamp</text>
+<polyline points="40.0,65.5 22.0,65.5 22.0,165.5 40.0,165.5" fill="none" stroke="#000" stroke-width="1.2"/>
+<line x1="31.0" y1="72.5" x2="31.0" y2="58.5" stroke="#000" stroke-width="1.3"/>
+<line x1="25.0" y1="72.5" x2="25.0" y2="58.5" stroke="#000" stroke-width="1.3"/>
+<line x1="31.0" y1="172.5" x2="31.0" y2="158.5" stroke="#000" stroke-width="1.3"/>
+<line x1="25.0" y1="172.5" x2="25.0" y2="158.5" stroke="#000" stroke-width="1.3"/>
+<polyline points="290.0,165.5 340.0,165.5 340.0,236.5 400.0,236.5" fill="none" stroke="#000" stroke-width="1.2"/>
+<line x1="299.0" y1="158.5" x2="299.0" y2="172.5" stroke="#000" stroke-width="1.3"/>
+<circle cx="310.0" cy="165.5" r="4.5" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<line x1="386.0" y1="236.5" x2="400.0" y2="244.5" stroke="#000" stroke-width="1.3"/>
+<line x1="386.0" y1="236.5" x2="400.0" y2="228.5" stroke="#000" stroke-width="1.3"/>
+<line x1="386.0" y1="236.5" x2="400.0" y2="236.5" stroke="#000" stroke-width="1.3"/>
+<circle cx="379.0" cy="236.5" r="4.5" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<polyline points="165.0,289.0 165.0,400.0" fill="none" stroke="#000" stroke-width="1.2"/>
+<line x1="172.0" y1="298.0" x2="158.0" y2="298.0" stroke="#000" stroke-width="1.3"/>
+<line x1="172.0" y1="304.0" x2="158.0" y2="304.0" stroke="#000" stroke-width="1.3"/>
+<line x1="165.0" y1="386.0" x2="157.0" y2="400.0" stroke="#000" stroke-width="1.3"/>
+<line x1="165.0" y1="386.0" x2="173.0" y2="400.0" stroke="#000" stroke-width="1.3"/>
+<line x1="165.0" y1="386.0" x2="165.0" y2="400.0" stroke="#000" stroke-width="1.3"/>
+<circle cx="165.0" cy="379.0" r="4.5" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<polyline points="40.0,435.5 22.0,435.5 22.0,595.5 40.0,595.5" fill="none" stroke="#000" stroke-width="1.2"/>
+<line x1="31.0" y1="442.5" x2="31.0" y2="428.5" stroke="#000" stroke-width="1.3"/>
+<line x1="25.0" y1="442.5" x2="25.0" y2="428.5" stroke="#000" stroke-width="1.3"/>
+<line x1="26.0" y1="595.5" x2="40.0" y2="603.5" stroke="#000" stroke-width="1.3"/>
+<line x1="26.0" y1="595.5" x2="40.0" y2="587.5" stroke="#000" stroke-width="1.3"/>
+<line x1="26.0" y1="595.5" x2="40.0" y2="595.5" stroke="#000" stroke-width="1.3"/>
+<circle cx="19.0" cy="595.5" r="4.5" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<polyline points="400.0,65.5 372.0,65.5 372.0,614.5 290.0,614.5" fill="none" stroke="#000" stroke-width="1.2"/>
+<line x1="391.0" y1="72.5" x2="391.0" y2="58.5" stroke="#000" stroke-width="1.3"/>
+<line x1="385.0" y1="72.5" x2="385.0" y2="58.5" stroke="#000" stroke-width="1.3"/>
+<line x1="304.0" y1="614.5" x2="290.0" y2="606.5" stroke="#000" stroke-width="1.3"/>
+<line x1="304.0" y1="614.5" x2="290.0" y2="622.5" stroke="#000" stroke-width="1.3"/>
+<line x1="304.0" y1="614.5" x2="290.0" y2="614.5" stroke="#000" stroke-width="1.3"/>
+<circle cx="311.0" cy="614.5" r="4.5" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<polyline points="650.0,65.5 765.0,65.5 765.0,84.5 790.0,84.5" fill="none" stroke="#000" stroke-width="1.2"/>
+<line x1="659.0" y1="58.5" x2="659.0" y2="72.5" stroke="#000" stroke-width="1.3"/>
+<line x1="665.0" y1="58.5" x2="665.0" y2="72.5" stroke="#000" stroke-width="1.3"/>
+<line x1="776.0" y1="84.5" x2="790.0" y2="92.5" stroke="#000" stroke-width="1.3"/>
+<line x1="776.0" y1="84.5" x2="790.0" y2="76.5" stroke="#000" stroke-width="1.3"/>
+<line x1="776.0" y1="84.5" x2="790.0" y2="84.5" stroke="#000" stroke-width="1.3"/>
+<circle cx="769.0" cy="84.5" r="4.5" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<polyline points="650.0,65.5 765.0,65.5 765.0,284.5 790.0,284.5" fill="none" stroke="#000" stroke-width="1.2"/>
+<line x1="659.0" y1="58.5" x2="659.0" y2="72.5" stroke="#000" stroke-width="1.3"/>
+<line x1="665.0" y1="58.5" x2="665.0" y2="72.5" stroke="#000" stroke-width="1.3"/>
+<line x1="776.0" y1="284.5" x2="790.0" y2="292.5" stroke="#000" stroke-width="1.3"/>
+<line x1="776.0" y1="284.5" x2="790.0" y2="276.5" stroke="#000" stroke-width="1.3"/>
+<line x1="776.0" y1="284.5" x2="790.0" y2="284.5" stroke="#000" stroke-width="1.3"/>
+<circle cx="769.0" cy="284.5" r="4.5" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<polyline points="650.0,65.5 765.0,65.5 765.0,445.5 790.0,445.5" fill="none" stroke="#000" stroke-width="1.2"/>
+<line x1="659.0" y1="58.5" x2="659.0" y2="72.5" stroke="#000" stroke-width="1.3"/>
+<line x1="665.0" y1="58.5" x2="665.0" y2="72.5" stroke="#000" stroke-width="1.3"/>
+<line x1="776.0" y1="445.5" x2="790.0" y2="453.5" stroke="#000" stroke-width="1.3"/>
+<line x1="776.0" y1="445.5" x2="790.0" y2="437.5" stroke="#000" stroke-width="1.3"/>
+<line x1="776.0" y1="445.5" x2="790.0" y2="445.5" stroke="#000" stroke-width="1.3"/>
+<circle cx="769.0" cy="445.5" r="4.5" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<polyline points="1140.0,445.5 1040.0,464.5" fill="none" stroke="#000" stroke-width="1.2"/>
+<line x1="1132.5" y1="454.1" x2="1129.9" y2="440.3" stroke="#000" stroke-width="1.3"/>
+<line x1="1126.6" y1="455.2" x2="1124.0" y2="441.4" stroke="#000" stroke-width="1.3"/>
+<line x1="1053.8" y1="461.9" x2="1038.5" y2="456.6" stroke="#000" stroke-width="1.3"/>
+<line x1="1053.8" y1="461.9" x2="1041.5" y2="472.4" stroke="#000" stroke-width="1.3"/>
+<line x1="1053.8" y1="461.9" x2="1040.0" y2="464.5" stroke="#000" stroke-width="1.3"/>
+<circle cx="1060.6" cy="460.6" r="4.5" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<polyline points="400.0,65.5 372.0,65.5 372.0,524.5 400.0,524.5" fill="none" stroke="#000" stroke-width="1.2"/>
+<line x1="391.0" y1="72.5" x2="391.0" y2="58.5" stroke="#000" stroke-width="1.3"/>
+<line x1="385.0" y1="72.5" x2="385.0" y2="58.5" stroke="#000" stroke-width="1.3"/>
+<line x1="386.0" y1="524.5" x2="400.0" y2="532.5" stroke="#000" stroke-width="1.3"/>
+<line x1="386.0" y1="524.5" x2="400.0" y2="516.5" stroke="#000" stroke-width="1.3"/>
+<line x1="386.0" y1="524.5" x2="400.0" y2="524.5" stroke="#000" stroke-width="1.3"/>
+<circle cx="379.0" cy="524.5" r="4.5" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<polyline points="790.0,575.5 715.0,575.5 715.0,638.5 650.0,638.5" fill="none" stroke="#000" stroke-width="1.2"/>
+<line x1="781.0" y1="582.5" x2="781.0" y2="568.5" stroke="#000" stroke-width="1.3"/>
+<circle cx="770.0" cy="575.5" r="4.5" fill="#fff" stroke="#000" stroke-width="1.3"/>
+<line x1="664.0" y1="638.5" x2="650.0" y2="630.5" stroke="#000" stroke-width="1.3"/>
+<line x1="664.0" y1="638.5" x2="650.0" y2="646.5" stroke="#000" stroke-width="1.3"/>
+<line x1="664.0" y1="638.5" x2="650.0" y2="638.5" stroke="#000" stroke-width="1.3"/>
+<circle cx="671.0" cy="638.5" r="4.5" fill="#fff" stroke="#000" stroke-width="1.3"/>
+</svg>

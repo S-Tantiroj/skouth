@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="730" viewBox="0 0 1400 730"><rect width="1400" height="730" fill="#fff"/>
+<rect x="640" y="230" width="260" height="185" rx="6" fill="#fff" stroke="#000" stroke-width="2"/>
+<rect x="640" y="230" width="260" height="22" rx="6" fill="#d9d9d9" stroke="#000" stroke-width="2"/>
+<circle cx="654" cy="241" r="4" fill="#e06c6c"/>
+<circle cx="668" cy="241" r="4" fill="#e0c06c"/>
+<circle cx="682" cy="241" r="4" fill="#6cbf6c"/>
+<rect x="710" y="235" width="150" height="12" rx="6" fill="#fff"/>
+<rect x="642" y="252" width="52" height="161" fill="#2f3542"/>
+<rect x="650" y="266" width="34" height="7" rx="3" fill="#8a93a6"/>
+<rect x="650" y="286" width="34" height="7" rx="3" fill="#8a93a6"/>
+<rect x="650" y="306" width="34" height="7" rx="3" fill="#8a93a6"/>
+<rect x="650" y="326" width="34" height="7" rx="3" fill="#8a93a6"/>
+<rect x="650" y="346" width="34" height="7" rx="3" fill="#8a93a6"/>
+<rect x="650" y="366" width="34" height="7" rx="3" fill="#8a93a6"/>
+<rect x="706" y="264" width="150" height="16" rx="3" fill="#fff" stroke="#999"/>
+<rect x="862" y="264" width="28" height="16" rx="3" fill="#3b6fd8"/>
+<rect x="706" y="288" width="38" height="11" rx="5" fill="#dbe7ff" stroke="#bbb"/>
+<rect x="750" y="288" width="38" height="11" rx="5" fill="#e9f5e9" stroke="#bbb"/>
+<rect x="794" y="288" width="38" height="11" rx="5" fill="#fff3d6" stroke="#bbb"/>
+<rect x="838" y="288" width="38" height="11" rx="5" fill="#dbe7ff" stroke="#bbb"/>
+<rect x="706" y="310" width="184" height="19" rx="3" fill="#fafafa" stroke="#ccc"/>
+<circle cx="718" cy="319.5" r="6" fill="#3b6fd8"/>
+<rect x="730" y="315" width="100" height="4" fill="#555"/>
+<rect x="730" y="322" width="70" height="3" fill="#aaa"/>
+<rect x="706" y="334" width="184" height="19" rx="3" fill="#fafafa" stroke="#ccc"/>
+<circle cx="718" cy="343.5" r="6" fill="#3b6fd8"/>
+<rect x="730" y="339" width="88" height="4" fill="#555"/>
+<rect x="730" y="346" width="70" height="3" fill="#aaa"/>
+<rect x="706" y="358" width="184" height="19" rx="3" fill="#fafafa" stroke="#ccc"/>
+<circle cx="718" cy="367.5" r="6" fill="#3b6fd8"/>
+<rect x="730" y="363" width="76" height="4" fill="#555"/>
+<rect x="730" y="370" width="70" height="3" fill="#aaa"/>
+<rect x="706" y="382" width="184" height="19" rx="3" fill="#fafafa" stroke="#ccc"/>
+<circle cx="718" cy="391.5" r="6" fill="#3b6fd8"/>
+<rect x="730" y="387" width="64" height="4" fill="#555"/>
+<rect x="730" y="394" width="70" height="3" fill="#aaa"/>
+<text x="770.0" y="441" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="27" font-weight="bold" text-anchor="middle" dominant-baseline="middle">ระบบ Skouth</text>
+<text x="770.0" y="469" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="22" font-weight="normal" text-anchor="middle" dominant-baseline="middle">(Next.js บน Vercel)</text>
+<g fill="none" stroke="#000" stroke-width="3"><circle cx="115" cy="94" r="15"/><path d="M89,138 Q89,114 115,114 Q141,114 141,138 Z"/></g>
+<text x="115" y="158" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="middle">Member</text>
+<polyline points="180,70 820,70 820,230" fill="none" stroke="#000" stroke-width="1.6"/>
+<polyline points="814,219 820,230 826,219" fill="none" stroke="#000" stroke-width="1.6"/>
+<rect x="293" y="56" width="254" height="28" fill="#fff"/>
+<text x="420" y="71" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="middle">ค้นหาและประเมินผู้สมัคร</text>
+<polyline points="180,112 770,112 770,230" fill="none" stroke="#000" stroke-width="1.6"/>
+<polyline points="764,219 770,230 776,219" fill="none" stroke="#000" stroke-width="1.6"/>
+<rect x="242" y="98" width="357" height="28" fill="#fff"/>
+<text x="420" y="113" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="middle">บันทึก Shortlist / ประเมินตนเอง</text>
+<polyline points="690,230 690,156 180,156" fill="none" stroke="#000" stroke-width="1.6"/>
+<polyline points="191,150 180,156 191,162" fill="none" stroke="#000" stroke-width="1.6"/>
+<rect x="300" y="142" width="240" height="28" fill="#fff"/>
+<text x="420" y="157" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="middle">แสดงผลลัพธ์และคะแนน</text>
+<g fill="none" stroke="#000" stroke-width="3"><circle cx="115" cy="304" r="15"/><path d="M89,348 Q89,324 115,324 Q141,324 141,348 Z"/></g>
+<text x="115" y="368" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="middle">Data Manager</text>
+<polyline points="180,300 640,300" fill="none" stroke="#000" stroke-width="1.6"/>
+<polyline points="629,294 640,300 629,306" fill="none" stroke="#000" stroke-width="1.6"/>
+<rect x="287" y="286" width="267" height="28" fill="#fff"/>
+<text x="420" y="301" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="middle">นำเข้าข้อมูลผู้สมัคร (CSV)</text>
+<polyline points="180,344 640,344" fill="none" stroke="#000" stroke-width="1.6"/>
+<polyline points="629,338 640,344 629,350" fill="none" stroke="#000" stroke-width="1.6"/>
+<rect x="250" y="330" width="339" height="28" fill="#fff"/>
+<text x="420" y="345" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="middle">จัดการตำแหน่งงาน / ระงับข้อมูล</text>
+<g fill="none" stroke="#000" stroke-width="3"><circle cx="115" cy="572" r="15"/><path d="M89,616 Q89,592 115,592 Q141,592 141,616 Z"/></g>
+<text x="115" y="636" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="middle">Admin</text>
+<polyline points="180,565 740,565 740,415" fill="none" stroke="#000" stroke-width="1.6"/>
+<polyline points="734,426 740,415 746,426" fill="none" stroke="#000" stroke-width="1.6"/>
+<rect x="346" y="551" width="148" height="28" fill="#fff"/>
+<text x="420" y="566" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="middle">อนุมัติบัญชีผู้ใช้</text>
+<polyline points="180,610 800,610 800,415" fill="none" stroke="#000" stroke-width="1.6"/>
+<polyline points="794,426 800,415 806,426" fill="none" stroke="#000" stroke-width="1.6"/>
+<rect x="339" y="596" width="161" height="28" fill="#fff"/>
+<text x="420" y="611" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="middle">กำหนดสิทธิ์ผู้ใช้</text>
+<rect x="1160" y="30" width="225" height="78" rx="10" fill="#f4f6fb" stroke="#000" stroke-width="2"/>
+<g fill="none" stroke="#000" stroke-width="2.5"><path d="M1185,65 v-7 a9,9 0 0 1 18,0 v7"/><rect x="1180" y="65" width="28" height="22" rx="3" fill="#fff"/></g><circle cx="1194" cy="76" r="3" fill="#000"/>
+<text x="1298" y="60" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="middle">Supabase Auth</text>
+<text x="1298" y="86" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" dominant-baseline="middle">ยืนยันตัวตน</text>
+<polyline points="850,230 850,48 1160,48" fill="none" stroke="#000" stroke-width="1.6"/>
+<polyline points="1149,42 1160,48 1149,54" fill="none" stroke="#000" stroke-width="1.6"/>
+<rect x="952" y="34" width="137" height="28" fill="#fff"/>
+<text x="1020" y="49" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="middle">API Request</text>
+<polyline points="1160,95 880,95 880,230" fill="none" stroke="#000" stroke-width="1.6"/>
+<polyline points="874,219 880,230 886,219" fill="none" stroke="#000" stroke-width="1.6"/>
+<rect x="923" y="81" width="214" height="28" fill="#fff"/>
+<text x="1030" y="96" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="middle">ส่งผลการยืนยันตัวตน</text>
+<rect x="1160" y="262" width="225" height="78" rx="10" fill="#f4f6fb" stroke="#000" stroke-width="2"/>
+<path d="M1194,281 Q1197,298 1214,301 Q1197,304 1194,321 Q1191,304 1174,301 Q1191,298 1194,281 Z" fill="#fff" stroke="#000" stroke-width="2.5"/>
+<text x="1298" y="292" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" dominant-baseline="middle">Google Gemini</text>
+<text x="1298" y="318" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="18" font-weight="normal" text-anchor="middle" dominant-baseline="middle">API ปัญญาประดิษฐ์</text>
+<polyline points="900,280 1160,280" fill="none" stroke="#000" stroke-width="1.6"/>
+<polyline points="1149,274 1160,280 1149,286" fill="none" stroke="#000" stroke-width="1.6"/>
+<rect x="923" y="266" width="214" height="28" fill="#fff"/>
+<text x="1030" y="281" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="middle">ส่งข้อมูลให้วิเคราะห์</text>
+<polyline points="1160,322 900,322" fill="none" stroke="#000" stroke-width="1.6"/>
+<polyline points="911,316 900,322 911,328" fill="none" stroke="#000" stroke-width="1.6"/>
+<rect x="910" y="308" width="240" height="28" fill="#fff"/>
+<text x="1030" y="323" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="middle">ส่งผลการวิเคราะห์กลับ</text>
+<rect x="1150" y="430" width="230" height="240" fill="#fff" stroke="#999"/>
+<rect x="1150" y="430" width="230" height="22" fill="#eef1f6" stroke="#999"/>
+<text x="1158" y="445" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#3b4a6b">Table (public)</text>
+<text x="1372" y="445" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#3b4a6b" text-anchor="end">Rows</text>
+<rect x="1158" y="458" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="465" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">activity_log</text>
+<text x="1372" y="465" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<rect x="1151" y="468" width="228" height="13" fill="#f6f7f9"/>
+<rect x="1158" y="471" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="478" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">analyses</text>
+<text x="1372" y="478" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<rect x="1158" y="484" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="491" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">candidate_skills</text>
+<text x="1372" y="491" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<rect x="1151" y="494" width="228" height="13" fill="#f6f7f9"/>
+<rect x="1158" y="497" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="504" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">candidates</text>
+<text x="1372" y="504" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<rect x="1158" y="510" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="517" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">education</text>
+<text x="1372" y="517" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<rect x="1151" y="520" width="228" height="13" fill="#f6f7f9"/>
+<rect x="1158" y="523" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="530" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">experience</text>
+<text x="1372" y="530" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<rect x="1158" y="536" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="543" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">ingest_runs</text>
+<text x="1372" y="543" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<rect x="1151" y="546" width="228" height="13" fill="#f6f7f9"/>
+<rect x="1158" y="549" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="556" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">jobs</text>
+<text x="1372" y="556" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<rect x="1158" y="562" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="569" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">pending_candidates</text>
+<text x="1372" y="569" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<rect x="1151" y="572" width="228" height="13" fill="#f6f7f9"/>
+<rect x="1158" y="575" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="582" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">profiles</text>
+<text x="1372" y="582" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<rect x="1158" y="588" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="595" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">resume_assessments</text>
+<text x="1372" y="595" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<rect x="1151" y="598" width="228" height="13" fill="#f6f7f9"/>
+<rect x="1158" y="601" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="608" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">self_profiles</text>
+<text x="1372" y="608" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<rect x="1158" y="614" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="621" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">shortlist_candidates</text>
+<text x="1372" y="621" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<rect x="1151" y="624" width="228" height="13" fill="#f6f7f9"/>
+<rect x="1158" y="627" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="634" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">shortlists</text>
+<text x="1372" y="634" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<rect x="1158" y="640" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="647" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">skills</text>
+<text x="1372" y="647" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<rect x="1151" y="650" width="228" height="13" fill="#f6f7f9"/>
+<rect x="1158" y="653" width="7" height="7" fill="none" stroke="#999"/>
+<text x="1171" y="660" font-family="Arial, sans-serif" font-size="10" fill="#2d4b8e">suppressed_profiles</text>
+<text x="1372" y="660" font-family="Arial, sans-serif" font-size="9" fill="#888" text-anchor="end">▸ Browse</text>
+<text x="1265" y="696" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="25" font-weight="bold" text-anchor="middle" dominant-baseline="middle">Database</text>
+<text x="1265" y="722" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="17" font-weight="normal" text-anchor="middle" dominant-baseline="middle">Supabase · PostgreSQL + pgvector</text>
+<polyline points="900,362 1300,362 1300,430" fill="none" stroke="#000" stroke-width="1.6"/>
+<polyline points="1294,419 1300,430 1306,419" fill="none" stroke="#000" stroke-width="1.6"/>
+<rect x="974" y="348" width="122" height="28" fill="#fff"/>
+<text x="1035" y="363" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="middle">บันทึกข้อมูล</text>
+<polyline points="1215,430 1215,400 900,400" fill="none" stroke="#000" stroke-width="1.6"/>
+<polyline points="911,394 900,400 911,406" fill="none" stroke="#000" stroke-width="1.6"/>
+<rect x="935" y="386" width="201" height="28" fill="#fff"/>
+<text x="1035" y="401" font-family="'TH Sarabun New', 'TH SarabunPSK', Sarabun, Tahoma, sans-serif" font-size="20" font-weight="normal" text-anchor="middle" dominant-baseline="middle">ดึงข้อมูลมาแสดงผล</text>
+</svg>
