@@ -54,9 +54,14 @@ export default function SignUp() {
         <div className="card stack">
           <h1 style={{ margin: 0 }}>ยืนยันอีเมลของคุณ</h1>
           <p className="muted" style={{ margin: 0 }}>
-            เราส่งลิงก์ยืนยันไปที่ <strong>{email}</strong> แล้ว กรุณาเปิดอีเมลแล้วกดลิงก์เพื่อยืนยัน
-            ระบบจะพาเข้าสู่ระบบให้อัตโนมัติ
+            เราส่งลิงก์ยืนยันไปที่ <strong>{email}</strong> แล้ว
           </p>
+          {/* บัญชีใหม่ต้องผ่านสองขั้น — ยืนยันอีเมลอย่างเดียวยังเข้าระบบไม่ได้ (migration 022a) */}
+          <ol className="muted" style={{ margin: 0, paddingLeft: 20, lineHeight: 1.7 }}>
+            <li>เปิดอีเมลแล้วกดลิงก์เพื่อยืนยันอีเมล</li>
+            <li>รอผู้ดูแลระบบอนุมัติบัญชี</li>
+            <li>เมื่อได้รับอนุมัติแล้ว เข้าสู่ระบบด้วยอีเมลและรหัสผ่านที่สมัครไว้</li>
+          </ol>
           <p className="faint" style={{ margin: 0, fontSize: 13 }}>
             ไม่พบอีเมล? ลองตรวจในกล่องจดหมายขยะ (spam)
           </p>
