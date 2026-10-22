@@ -4,6 +4,7 @@ import { identityName, identitySecondary } from '@/lib/auth/identity'
 import { getServerClient } from '@/lib/supabase/server'
 import RoleSelect from '@/components/RoleSelect'
 import AccountStatusActions from '@/components/AccountStatusActions'
+import { CONFIRMATION_LABELS, confirmationMap, confirmationOf } from '@/lib/auth/emailConfirmation'
 
 export const dynamic = 'force-dynamic'
 
@@ -36,6 +37,15 @@ export default async function AdminUsers() {
   const rows = (users ?? []) as any[]
   const pending = rows.filter((u) => u.status === 'pending')
 
+  // คิวมีบัญชีที่ยังไม่ยืนยันอีเมลปนอยู่ (profiles ถูกสร้างตอนสมัคร) จึงอ่านสถานะจาก auth
+  // perPage 1000 พอสำหรับระบบภายใน · อ่านไม่ได้ให้แสดง "ไม่ทราบ" ไม่เดาว่ายืนยันแล้ว
+  let confirmations = null as ReturnType<typeof confirmationMap>
+  if (pending.length > 0) {
+    const { data: authData, error: authError } = await getServerClient().auth.admin.listUsers({ perPage: 1000 })
+    if (authError) console.error('listUsers failed:', authError.message)
+    else confirmations = confirmationMap(authData.users)
+  }
+
   return (
     <main>
       <h1>จัดการผู้ใช้</h1>
@@ -54,7 +64,8 @@ export default async function AdminUsers() {
                 บัญชีรออนุมัติ ({pending.length})
               </h2>
               <p className="muted" style={{ margin: 0, fontSize: 13 }}>
-                บัญชีเหล่านี้ยืนยันอีเมลแล้วแต่ยังเข้าใช้งานไม่ได้จนกว่าจะได้รับอนุมัติ
+                บัญชีเหล่านี้เข้าใช้งานไม่ได้จนกว่าจะได้รับอนุมัติ · บัญชีที่ยังไม่ยืนยันอีเมลจะเข้าสู่ระบบ
+                ไม่ได้แม้ได้รับอนุมัติแล้ว จนกว่าเจ้าของบัญชีจะกดลิงก์ยืนยันในอีเมล
               </p>
               <div className="list">
                 {pending.map((u) => {
@@ -75,6 +86,14 @@ export default async function AdminUsers() {
                         <div className="faint" style={{ fontSize: 12 }}>
                           สมัครเมื่อ {String(u.created_at ?? '').slice(0, 10)}
                         </div>
+                        {(() => {
+                          const c = confirmationOf(confirmations, u.id)
+                          return (
+                            <div style={{ fontSize: 12, color: c === 'confirmed' ? 'var(--ok)' : 'var(--muted)' }}>
+                              {CONFIRMATION_LABELS[c]}
+                            </div>
+                          )
+                        })()}
                       </div>
                       <AccountStatusActions userId={u.id} status={u.status} label={name} />
                     </div>
