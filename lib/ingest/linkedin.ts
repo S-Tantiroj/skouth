@@ -65,9 +65,26 @@ export const KNOWN_COLUMNS = [
   'linkedinSkillsLabel', 'skillsLabel',
 ] as const
 
+// รายการที่ 3 ขึ้นไป — ต่อเลขท้ายชื่อคอลัมน์แบบเดียวกับ `company2` / `school2`
+// ที่ PhantomBuster ใช้อยู่แล้ว เช่น `jobTitle3` `company3` `school3` `schoolDegree4`
+//
+// เดิมระบบอ่านได้แค่สองชุด (ปัจจุบัน + ก่อนหน้า) ตามไฟล์ตัวอย่างของ phantom ทั้งสองแบบ
+// ฐานข้อมูลเก็บได้ไม่จำกัดอยู่แล้ว (education / experience เป็นตารางลูก) ข้อจำกัดจึงอยู่ที่
+// ตัวอ่านไฟล์ล้วนๆ ชุดที่ 1–2 ยังอ่านชื่อเดิมทั้งสองแบบ ไฟล์เก่าทุกไฟล์จึงได้ผลเท่าเดิม
+export const MAX_NUMBERED_SLOT = 20
+const EXP_FIELDS = ['jobTitle', 'company', 'jobDateRange', 'jobDescription'] as const
+const EDU_FIELDS = ['school', 'schoolDegree', 'schoolFieldOfStudy', 'schoolDateRange'] as const
+const NUMBERED = new RegExp(
+  `^(${[...EXP_FIELDS, ...EDU_FIELDS].map(norm).join('|')})([0-9]+)$`
+)
+
 /** true when the parser reads this column under either naming scheme */
 export function isKnownColumn(header: string): boolean {
-  return KNOWN_COLUMNS.some((k) => norm(k) === norm(header))
+  if (KNOWN_COLUMNS.some((k) => norm(k) === norm(header))) return true
+  const m = norm(header).match(NUMBERED)
+  if (!m) return false
+  const n = Number(m[2])
+  return n >= 3 && n <= MAX_NUMBERED_SLOT
 }
 
 // PhantomBuster HTML-escapes some columns and not others — in a real search
@@ -88,7 +105,8 @@ const decodeEntities = (s: string) =>
 
 // Parse a LinkedIn-shaped CSV into CandidateInput rows.
 // Deterministic (no LLM). Accepts camelCase or friendly-label headers. Captures
-// current + previous job and school. Education country is intentionally omitted.
+// current + previous job and school, plus numbered slots 3..MAX_NUMBERED_SLOT
+// (jobTitle3, school3 …). Education country is intentionally omitted.
 //
 // `source` is a PARAMETER because the file cannot tell you where it came from.
 // The same column layout arrives two ways: a PhantomBuster export (`scraper`)
@@ -129,47 +147,56 @@ export function parseLinkedInCsv(
       const full_name = first && last ? pair : get('fullName') || pair
       if (!full_name) return null
 
+      // ชื่อคอลัมน์ของแต่ละชุด: ชุด 1–2 รับทั้งสองแบบของ phantom ชุด 3+ ใช้เลขต่อท้าย
+      const expKeys = (n: number) =>
+        n === 1
+          ? { title: ['linkedinJobTitle', 'jobTitle'], company: ['companyName', 'company'],
+              range: ['linkedinJobDateRange', 'jobDateRange'], desc: ['linkedinJobDescription', 'jobDescription'] }
+          : n === 2
+            ? { title: ['linkedinPreviousJobTitle', 'jobTitle2'], company: ['previousCompanyName', 'company2'],
+                range: ['linkedinPreviousJobDateRange', 'jobDateRange2'],
+                desc: ['linkedinPreviousJobDescription', 'jobDescription2'] }
+            : { title: [`jobTitle${n}`], company: [`company${n}`], range: [`jobDateRange${n}`], desc: [`jobDescription${n}`] }
+      const eduKeys = (n: number) =>
+        n === 1
+          ? { name: ['linkedinSchoolName', 'school'], degree: ['linkedinSchoolDegree', 'schoolDegree'],
+              field: ['linkedinSchoolFieldOfStudy', 'schoolFieldOfStudy'], range: ['linkedinSchoolDateRange', 'schoolDateRange'] }
+          : n === 2
+            ? { name: ['linkedinPreviousSchoolName', 'school2'], degree: ['linkedinPreviousSchoolDegree', 'schoolDegree2'],
+                field: ['linkedinPreviousSchoolFieldOfStudy', 'schoolFieldOfStudy2'],
+                range: ['linkedinPreviousSchoolDateRange', 'schoolDateRange2'] }
+            : { name: [`school${n}`], degree: [`schoolDegree${n}`], field: [`schoolFieldOfStudy${n}`], range: [`schoolDateRange${n}`] }
+
+      // อ่านทุกชุดจนถึงเพดาน ไม่หยุดที่ชุดแรกที่ว่าง — แถวที่กรอกชุด 4 แต่เว้นชุด 3
+      // ต้องไม่ทำให้ชุด 4 หายเงียบๆ
       const experience: NonNullable<CandidateInput['experience']> = []
-      const cur = parseLinkedInDateRange(get('linkedinJobDateRange', 'jobDateRange'))
-      if (get('linkedinJobTitle', 'jobTitle') || get('companyName', 'company')) {
+      for (let n = 1; n <= MAX_NUMBERED_SLOT; n++) {
+        const k = expKeys(n)
+        const title = get(...k.title)
+        const company = get(...k.company)
+        if (!title && !company) continue
+        const r = parseLinkedInDateRange(get(...k.range))
         experience.push({
-          company: get('companyName', 'company') || undefined,
-          title: get('linkedinJobTitle', 'jobTitle') || undefined,
-          start_date: cur.start_date ?? undefined,
-          end_date: cur.end_date ?? undefined,
-          description: get('linkedinJobDescription', 'jobDescription') || undefined,
-        })
-      }
-      const prev = parseLinkedInDateRange(get('linkedinPreviousJobDateRange', 'jobDateRange2'))
-      if (get('linkedinPreviousJobTitle', 'jobTitle2') || get('previousCompanyName', 'company2')) {
-        experience.push({
-          company: get('previousCompanyName', 'company2') || undefined,
-          title: get('linkedinPreviousJobTitle', 'jobTitle2') || undefined,
-          start_date: prev.start_date ?? undefined,
-          end_date: prev.end_date ?? undefined,
-          description: get('linkedinPreviousJobDescription', 'jobDescription2') || undefined,
+          company: company || undefined,
+          title: title || undefined,
+          start_date: r.start_date ?? undefined,
+          end_date: r.end_date ?? undefined,
+          description: get(...k.desc) || undefined,
         })
       }
 
       const education: NonNullable<CandidateInput['education']> = []
-      const sch = parseLinkedInDateRange(get('linkedinSchoolDateRange', 'schoolDateRange'))
-      if (get('linkedinSchoolName', 'school')) {
+      for (let n = 1; n <= MAX_NUMBERED_SLOT; n++) {
+        const k = eduKeys(n)
+        const institution = get(...k.name)
+        if (!institution) continue
+        const r = parseLinkedInDateRange(get(...k.range))
         education.push({
-          institution: get('linkedinSchoolName', 'school') || undefined,
-          degree: get('linkedinSchoolDegree', 'schoolDegree') || undefined,
-          field_of_study: get('linkedinSchoolFieldOfStudy', 'schoolFieldOfStudy') || undefined,
-          start_year: yearOf(sch.start_date),
-          end_year: yearOf(sch.end_date),
-        })
-      }
-      const psch = parseLinkedInDateRange(get('linkedinPreviousSchoolDateRange', 'schoolDateRange2'))
-      if (get('linkedinPreviousSchoolName', 'school2')) {
-        education.push({
-          institution: get('linkedinPreviousSchoolName', 'school2') || undefined,
-          degree: get('linkedinPreviousSchoolDegree', 'schoolDegree2') || undefined,
-          field_of_study: get('linkedinPreviousSchoolFieldOfStudy', 'schoolFieldOfStudy2') || undefined,
-          start_year: yearOf(psch.start_date),
-          end_year: yearOf(psch.end_date),
+          institution,
+          degree: get(...k.degree) || undefined,
+          field_of_study: get(...k.field) || undefined,
+          start_year: yearOf(r.start_date),
+          end_year: yearOf(r.end_date),
         })
       }
 

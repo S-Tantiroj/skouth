@@ -74,3 +74,10 @@ test('the example profile URL is obviously fictional', () => {
   // ห้ามใส่ URL ของคนจริงในไฟล์ที่ commit — ผู้ใช้จะเปิดตามไปหาคนที่ไม่ได้ยินยอม
   expect(buildCsvTemplate()).toContain('example-not-a-real-person')
 })
+
+test('the template shows a third slot so people know the list can grow', () => {
+  const [row] = parseLinkedInCsv(buildCsvTemplate())
+  expect(row.experience).toHaveLength(3)
+  expect(row.education).toHaveLength(3)
+  expect(row.experience?.[2].company).toBe('Example Securities')
+})

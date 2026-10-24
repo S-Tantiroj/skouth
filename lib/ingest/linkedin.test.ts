@@ -1,4 +1,4 @@
-import { parseLinkedInCsv } from './linkedin'
+import { parseLinkedInCsv, isKnownColumn, MAX_NUMBERED_SLOT } from './linkedin'
 
 const camel = `firstName,lastName,linkedinHeadline,linkedinProfileUrl,linkedinJobTitle,companyName,linkedinJobDateRange,linkedinPreviousJobTitle,previousCompanyName,linkedinSchoolName,linkedinSchoolDegree,linkedinSchoolFieldOfStudy,linkedinSchoolDateRange,linkedinSkillsLabel,professionalEmail
 Somchai,Jaidee,Data Scientist,https://linkedin.com/in/somchai,Senior Data Scientist,Agoda,Jan 2020 - Present,Data Analyst,SCB,MIT,Master of Science,Computer Science,2015 - 2017,"Python; SQL, Machine Learning",somchai@x.com`
@@ -166,4 +166,51 @@ test('decoding does not double-decode escaped entities', () => {
 test('prefixed headers still win when a file somehow has both', () => {
   const csv = `firstName,lastName,headline,linkedinHeadline\nSomchai,Jaidee,short,prefixed`
   expect(parseLinkedInCsv(csv)[0].headline).toBe('prefixed')
+})
+
+// ---------------------------------------------------------------------------
+// รายการที่ 3 ขึ้นไป (เลขต่อท้ายชื่อคอลัมน์)
+//
+// ฐานข้อมูลเก็บ education / experience ได้ไม่จำกัด แต่ตัวอ่านเดิมรับแค่สองชุด
+// ผู้สมัครที่นำเข้าจาก CSV จึงมีไม่เกินสองรายการทุกคน (ตรวจกับฐานจริง 2026-10-24)
+// ---------------------------------------------------------------------------
+
+const fourJobs = `fullName,jobTitle,company,jobDateRange,jobTitle2,company2,jobDateRange2,jobTitle3,company3,jobDateRange3,jobTitle4,company4,jobDateRange4,school,school2,school3,schoolDegree3,schoolDateRange3
+Somchai Jaidee,Lead,A Co,Jan 2022 - Present,Senior,B Co,Jan 2020 - Dec 2021,Analyst,C Co,Jan 2018 - Dec 2019,Intern,D Co,Jun 2017 - Aug 2017,MIT,Chulalongkorn University,Triam Udom,High School,2010 - 2013`
+
+test('reads experience and education beyond two slots, in order', () => {
+  const [c] = parseLinkedInCsv(fourJobs)
+  expect(c.experience!.map((e) => e.company)).toEqual(['A Co', 'B Co', 'C Co', 'D Co'])
+  expect(c.experience![2]).toMatchObject({ title: 'Analyst', start_date: '2018-01-01' })
+  expect(c.education!.map((e) => e.institution)).toEqual(['MIT', 'Chulalongkorn University', 'Triam Udom'])
+  expect(c.education![2]).toMatchObject({ degree: 'High School', start_year: 2010, end_year: 2013 })
+})
+
+test('a blank slot in the middle does not drop the slots after it', () => {
+  // ชุด 3 ว่างทั้งชุด ชุด 4 มีค่า — ถ้าหยุดที่ชุดแรกที่ว่าง ชุด 4 จะหายเงียบๆ
+  const csv = `fullName,jobTitle,company,jobTitle3,company3,jobTitle4,company4
+Somchai Jaidee,Lead,A Co,,,Intern,D Co`
+  const [c] = parseLinkedInCsv(csv)
+  expect(c.experience!.map((e) => e.company)).toEqual(['A Co', 'D Co'])
+})
+
+test('two-slot files still parse exactly as before', () => {
+  const [c] = parseLinkedInCsv(camel)
+  expect(c.experience).toHaveLength(2)
+  expect(c.education).toHaveLength(1)
+})
+
+test('numbered columns count as known, within the slot ceiling', () => {
+  expect(isKnownColumn('jobTitle3')).toBe(true)
+  expect(isKnownColumn('schoolDegree4')).toBe(true)
+  expect(isKnownColumn('School Field Of Study 5')).toBe(true)
+  expect(isKnownColumn(`company${MAX_NUMBERED_SLOT}`)).toBe(true)
+  expect(isKnownColumn(`company${MAX_NUMBERED_SLOT + 1}`)).toBe(false)
+  expect(isKnownColumn('jobTitle1')).toBe(false)
+  expect(isKnownColumn('favouriteColour3')).toBe(false)
+})
+
+test('the slot ceiling is 20', () => {
+  // ค่าคงที่ที่อ่านจากโค้ดเองจับค่าผิดไม่ได้ ต้องมีเทสต์ที่ระบุตัวเลขตรงๆ คู่กัน
+  expect(MAX_NUMBERED_SLOT).toBe(20)
 })

@@ -29,6 +29,7 @@ export default async function ManualImportPage() {
       </div>
       <p className="faint" style={{ fontSize: 13, marginTop: 0 }}>
         ไม่แน่ใจว่าคอลัมน์ต้องชื่ออะไร ดาวน์โหลดเทมเพลตแล้วดูหัวตารางกับแถวตัวอย่าง
+        · ประวัติการทำงานหรือการศึกษาเกินสามรายการ เพิ่มคอลัมน์โดยต่อเลข เช่น jobTitle4 company4 school4
       </p>
 
       <ImportForm />
