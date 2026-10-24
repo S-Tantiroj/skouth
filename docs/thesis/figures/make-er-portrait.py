@@ -7,12 +7,14 @@ import math, os, io
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 src = io.open(os.path.join(HERE, 'make-er.py'), encoding='utf-8').read()
-ns = {}; exec(src.split('def esc')[0], ns); T = ns['T']
+ns = {}; exec(src.split('def esc')[0], ns); T = ns['T']; doc = ns['doc']
 
-W, ROW, HEAD = 200, 20, 27
+W, ROW, HEAD = 186, 20, 27
 CW, CH = 860, 1255                      # สัดส่วน ~0.69 เข้ากับพื้นที่พิมพ์ A4 แนวตั้ง
 FONT = 'Arial, Helvetica, sans-serif'
-XA, XB, XC = 40, 330, 620               # สามคอลัมน์
+# สามคอลัมน์ เว้นช่องซ้าย 60 · ช่องระหว่างคอลัมน์ 100 · ช่องขวา 40 ไว้เดินเส้นความสัมพันธ์
+# ทุกเส้นออกจากแถว PK ของตารางแม่ และเข้าที่แถว FK ของตารางลูก โดยเดินในช่องว่างเท่านั้น
+XA = 60; XB = XA + W + 100; XC = XB + W + 100
 o, box = [], {}
 
 def esc(s): return s.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
@@ -21,16 +23,16 @@ def ent(name, x, y):
     o.append(f'<rect x="{x}" y="{y}" width="{W}" height="{h}" fill="#fff" stroke="#000" stroke-width="1.4"/>')
     o.append(f'<rect x="{x}" y="{y}" width="{W}" height="{HEAD}" fill="#e6e6e6" stroke="#000" stroke-width="1.4"/>')
     o.append(f'<text x="{x+W/2}" y="{y+19}" font-family="{FONT}" font-size="15" font-weight="bold" text-anchor="middle">{esc(name)}</text>')
-    o.append(f'<line x1="{x+44}" y1="{y+HEAD}" x2="{x+44}" y2="{y+h}" stroke="#000" stroke-width="0.8"/>')
+    o.append(f'<line x1="{x+42}" y1="{y+HEAD}" x2="{x+42}" y2="{y+h}" stroke="#000" stroke-width="0.8"/>')
     for i,(k,c,t) in enumerate(cols):
         yy = y + HEAD + i*ROW + 14.5
         o.append(f'<text x="{x+5}" y="{yy}" font-family="{FONT}" font-size="11" font-weight="bold">{k.replace(",","/")}</text>')
         pk = 'PK' in k
         fw = 'bold' if pk else 'normal'; ul = ' text-decoration="underline"' if pk else ''
-        o.append(f'<text x="{x+50}" y="{yy}" font-family="{FONT}" font-size="14" font-weight="{fw}"{ul}>{esc(c)}</text>')
-def a(name, col, side):
+        o.append(f'<text x="{x+47}" y="{yy}" font-family="{FONT}" font-size="13" font-weight="{fw}"{ul}>{esc(doc(name, c))}</text>')
+def a(name, col, side, dy=0):   # dy เลื่อนจุดต่อในแถวเดียวกัน เมื่อแถวนั้นมีเส้นออกสองกลุ่ม
     x, y, cols = box[name]; i = [c for _,c,_ in cols].index(col)
-    return (x + (W if side=='R' else 0), y + HEAD + i*ROW + ROW/2)
+    return (x + (W if side=='R' else 0), y + HEAD + i*ROW + ROW/2 + dy)
 def tb(name, side, dx=W/2):
     x, y, cols = box[name]; return (x+dx, y if side=='T' else y+HEAD+ROW*len(cols))
 def L(a,b,c,d,w=1.4): o.append(f'<line x1="{a:.1f}" y1="{b:.1f}" x2="{c:.1f}" y2="{d:.1f}" stroke="#000" stroke-width="{w}"/>')
@@ -62,24 +64,42 @@ note(XA, 83, 'Supabase Auth (passwords stored here)')
 note(XB, 918, 'entity_id is not a foreign key (by design)')
 
 # ---------- ความสัมพันธ์ 18 เส้น ----------
-A=a('auth.users','id','L'); B=a('profiles','id','L'); rel([A,(22,A[1]),(22,B[1]),B],'one','one')
-A=a('profiles','id','R'); B=a('candidates','created_by','L'); rel([A,(270,A[1]),(270,B[1]),B],'zeroone','zeromany')
-rel([tb('profiles','B'), tb('shortlists','T')],'one','zeromany')
-A=a('shortlists','id','L'); B=a('shortlist_candidates','shortlist_id','L'); rel([A,(22,A[1]),(22,B[1]),B],'one','zeromany')
-A=tb('candidates','B',40); B=a('shortlist_candidates','candidate_id','R'); rel([A,(A[0],453),(300,453),(300,B[1]),B],'one','zeromany')
-rel([tb('candidates','B'), tb('analyses','T')],'one','zeromany')
+# ช่องเดินเส้น (x) — เส้นที่มีตารางแม่เดียวกันใช้ช่องร่วมกันเป็น "บัส" แยกกิ่งไปแต่ละตารางลูก
+LO, LI = XA - 50, XA - 26                         # ช่องซ้าย: นอก · ใน
+G3, G2, G1 = XA + W + 26, XA + W + 50, XA + W + 74 # ระหว่างคอลัมน์ A–B
+H3, H2, H1 = XB + W + 26, XB + W + 50, XB + W + 74 # ระหว่างคอลัมน์ B–C
+R1 = XC + W + 26                                   # ช่องขวา
+def link(P, ch, C, pk, ck): rel([P, (ch, P[1]), (ch, C[1]), C], pk, ck)
+
+# profiles.user_id → auth.users (ช่องซ้ายนอก · จุดต่อเลื่อนขึ้น)
+link(a('auth.users','id','L'), LO, a('profiles','id','L',-5), 'one', 'one')
+# profiles.user_id → owner_id ที่บังคับมีค่า (ช่องซ้ายใน · จุดต่อเลื่อนลง)
+for t in ('shortlists','self_profiles'):
+    link(a('profiles','id','L',5), LI, a(t,'owner_id','L'), 'one', 'zeromany')
+# profiles.user_id → FK ที่เป็นค่าว่างได้ (ช่อง G1)
+P = a('profiles','id','R')
+for t,c,sd in (('candidates','created_by','L'),('activity_log','actor_id','L'),
+               ('pending_candidates','reviewed_by','L'),('suppressed_profiles','created_by','R')):
+    link(P, G1, a(t,c,sd), 'zeroone', 'zeromany')
+# shortlists.sl_id → shortlist_candidates · self_profiles.sp_id → resume_assessments (ช่อง G3)
+link(a('shortlists','id','R'), G3, a('shortlist_candidates','shortlist_id','R'), 'one', 'zeromany')
+link(a('self_profiles','id','R'), G3, a('resume_assessments','profile_id','R'), 'one', 'zeromany')
+# candidates.can_id → shortlist_candidates · analyses (ช่อง G2)
+P = a('candidates','id','L')
+link(P, G2, a('shortlist_candidates','candidate_id','R'), 'one', 'zeromany')
+link(P, G2, a('analyses','candidate_id','L'), 'one', 'zeromany')
+# candidates.can_id → education · experience · candidate_skills (ช่อง H1)
+P = a('candidates','id','R')
 for t in ('education','experience','candidate_skills'):
-    A=a('candidates','id','R'); B=a(t,'candidate_id','L'); rel([A,(565,A[1]),(565,B[1]),B],'one','zeromany')
-A=a('skills','id','R'); B=a('candidate_skills','skill_id','R'); rel([A,(842,A[1]),(842,B[1]),B],'one','zeromany')
-A=a('jobs','id','L'); B=a('analyses','job_id','R'); rel([A,(555,A[1]),(555,B[1]),B],'zeroone','zeromany')
-A=a('profiles','status','R'); B=a('self_profiles','owner_id','R'); rel([A,(255,A[1]),(255,B[1]),B],'one','zeromany')
-P=a('profiles','email','R')
-for t,c,s in (('activity_log','actor_id','L'),('pending_candidates','reviewed_by','L'),('suppressed_profiles','created_by','R')):
-    B=a(t,c,s); rel([P,(285,P[1]),(285,B[1]),B],'zeroone','zeromany')
-rel([tb('self_profiles','B'), tb('resume_assessments','T')],'one','zeromany')
-I=a('ingest_runs','id','L')
-B=a('candidates','ingest_run_id','R'); rel([I,(595,I[1]),(595,B[1]),B],'zeroone','zeromany')
-B=a('pending_candidates','ingest_run_id','R'); rel([I,(555,I[1]),(555,B[1]),B],'zeroone','zeromany')
+    link(P, H1, a(t,'candidate_id','L'), 'one', 'zeromany')
+# jobs.job_id → analyses.job_id (ช่อง H2)
+link(a('jobs','id','L'), H2, a('analyses','job_id','R'), 'zeroone', 'zeromany')
+# ingest_runs.run_id → candidates · pending_candidates (ช่อง H3)
+P = a('ingest_runs','id','L')
+for t in ('candidates','pending_candidates'):
+    link(P, H3, a(t,'ingest_run_id','R'), 'zeroone', 'zeromany')
+# skills.skill_id → candidate_skills.skill_id (ช่องขวา)
+link(a('skills','id','R'), R1, a('candidate_skills','skill_id','R'), 'one', 'zeromany')
 
 svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="{CW}" height="{CH}" viewBox="0 0 {CW} {CH}"><rect width="{CW}" height="{CH}" fill="#fff"/>\n' + '\n'.join(o) + '\n</svg>'
 io.open(os.path.join(HERE, 'fig3-8-er-portrait.svg'), 'w', encoding='utf-8').write(svg)
