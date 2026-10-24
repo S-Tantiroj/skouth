@@ -134,7 +134,7 @@
       const decision = decideAccess(p, !!readError)
       if (!decision.allowed) {
         // ออกจากระบบก่อน ไม่ให้คุกกี้ค้างในสถานะล็อกอินแต่ใช้งานไม่ได้
-        await sb.auth.signOut()
+        await sb.auth.signOut({ scope: 'local' })
         return setMsg(accessDeniedMessage(decision.reason))
       }
     }

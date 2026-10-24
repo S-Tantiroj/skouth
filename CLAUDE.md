@@ -172,6 +172,14 @@ Full spec and plan live in `docs/superpowers/`:
   หน้าที่ของสองค่า: **60 = ความเรียบร้อยของหน้าจอ · 254 = กันการใช้งานผิดวัตถุประสงค์**
   เขียน `display_name is null or ...` ไว้ชัดเจนแทนการพึ่งตรรกะสามค่าของ SQL —
   NULL ยอมรับได้เพราะ `identityName` ถอยไปใช้ `email` อยู่แล้ว
+- **ผู้ใช้หลุดออกจากระบบเองภายในไม่กี่นาที — แก้แล้ว 2026-10-25** (ยืนยันจาก auth log ของ Supabase)
+  สามสาเหตุซ้อนกัน **(1)** `getSession` ตั้ง `setAll: () => {}` refresh token ที่ถูกหมุนใหม่ใน route handler
+  จึงหายไป (log: `token_refreshed` + `token_revoked` จาก user agent `node`) คำขอถัดไปใช้ตัวเก่า →
+  `refresh_token_not_found` · **(2)** middleware สร้าง `res` ก่อนเขียนคุกกี้ลง request ผู้ทำงานต่อจึงได้
+  คุกกี้เก่า ต้อง `res = NextResponse.next({ request: req })` **ใหม่ใน `setAll`** ตามแบบของ @supabase/ssr ·
+  และ `/api/*` ไม่เคยผ่าน middleware เลย ตอนนี้อยู่ใน matcher แล้วแต่**ไม่ redirect** (route ตอบ 401 เอง)
+  **(3)** `signOut()` ค่าตั้งต้นของ supabase-js คือ `scope: 'global'` ออกจากระบบ**ทุกเบราว์เซอร์**ของบัญชีนั้น
+  (log: `session_not_found` จาก Edge หลังกดออกใน Chrome) ทุกจุดใช้ `{ scope: 'local' }` แล้ว
 - **`search_path` ของ RPC ต้องมี `extensions` ด้วยเสมอ** — pgvector ติดตั้งใน schema
   `extensions` ไม่ใช่ `public` ตัวดำเนินการ `<=>` จึงอยู่ที่นั่น ตั้งเป็น
   `public, pg_temp` เฉยๆ แล้ว RPC ทั้งสี่พังทันทีด้วย

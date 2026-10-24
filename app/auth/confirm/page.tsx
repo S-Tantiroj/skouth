@@ -50,7 +50,7 @@ export default function ConfirmEmail() {
       // ทำให้ผู้ใช้อยู่ในสถานะ "ล็อกอินอยู่แต่ทำอะไรไม่ได้" ซึ่งอธิบายยากกว่าการไม่ได้ล็อกอิน
       // (signOut ทำให้ onAuthStateChange ยิงด้วย session = null ซึ่ง handler ข้างล่าง
       //  ไม่สนใจ จึงไม่วนกลับมาที่นี่)
-      await db.auth.signOut()
+      await db.auth.signOut({ scope: 'local' })
       setBlocked(accessDeniedMessage(decision.reason))
     }
 

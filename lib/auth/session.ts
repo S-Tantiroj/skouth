@@ -1,3 +1,4 @@
+import type { CookieOptions } from '@supabase/ssr'
 import { decideAccess } from './profileGate'
 
 export type Role = 'admin' | 'data_manager' | 'member'
@@ -30,7 +31,14 @@ export async function getSession(): Promise<{ userId: string; role: Role } | nul
     {
       cookies: {
         getAll: () => cookieStore.getAll(),
-        setAll: () => {},
+        // เขียนคุกกี้ที่ต่ออายุแล้วกลับไปเมื่อทำได้ (route handler) — เดิมเป็น no-op ทำให้ refresh token
+        // ที่ถูกหมุนใหม่หายไป แล้วคำขอถัดไปใช้ตัวเก่าที่ถูกเพิกถอน · server component เขียนคุกกี้ไม่ได้
+        // (โยน error) จึงกลืนไว้ ส่วนนั้น middleware ต่ออายุให้ก่อนแล้ว
+        setAll: (cookiesToSet: { name: string; value: string; options?: CookieOptions }[]) => {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
+          } catch {}
+        },
       },
     }
   )

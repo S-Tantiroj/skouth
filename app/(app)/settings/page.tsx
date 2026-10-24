@@ -66,7 +66,7 @@ export default function SettingsPage() {
   }
 
   const logout = async () => {
-    await db.auth.signOut()
+    await db.auth.signOut({ scope: 'local' })
     window.location.href = '/login'
   }
 
