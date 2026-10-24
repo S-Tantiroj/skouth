@@ -178,6 +178,7 @@ Full spec and plan live in `docs/superpowers/`:
   `refresh_token_not_found` · **(2)** middleware สร้าง `res` ก่อนเขียนคุกกี้ลง request ผู้ทำงานต่อจึงได้
   คุกกี้เก่า ต้อง `res = NextResponse.next({ request: req })` **ใหม่ใน `setAll`** ตามแบบของ @supabase/ssr ·
   และ `/api/*` ไม่เคยผ่าน middleware เลย ตอนนี้อยู่ใน matcher แล้วแต่**ไม่ redirect** (route ตอบ 401 เอง)
+  หน้าสาธารณะ (`/` `/help` `/terms` `/privacy`) ก็อยู่ใน matcher ด้วยเหตุผลเดียวกัน ดูหัวข้อหน้าสาธารณะ
   **(3)** `signOut()` ค่าตั้งต้นของ supabase-js คือ `scope: 'global'` ออกจากระบบ**ทุกเบราว์เซอร์**ของบัญชีนั้น
   (log: `session_not_found` จาก Edge หลังกดออกใน Chrome) ทุกจุดใช้ `{ scope: 'local' }` แล้ว
 - **`search_path` ของ RPC ต้องมี `extensions` ด้วยเสมอ** — pgvector ติดตั้งใน schema
@@ -1032,8 +1033,14 @@ Spec/plan: `docs/superpowers/{specs,plans}/2026-10-03-access-control-and-shortli
 
 ## หน้าสาธารณะ
 
-`/` และ `/help` อยู่ในกลุ่ม `(public)` เปิดให้เข้าโดยไม่ต้องล็อกอิน — `matcher` ใน
-`middleware.ts` เป็นรายการเจาะจงที่ไม่ครอบสองเส้นทางนี้ **อย่าเพิ่มเข้าไป**
+`/` และ `/help` อยู่ในกลุ่ม `(public)` เปิดให้เข้าโดยไม่ต้องล็อกอิน — **ตั้งแต่ 2026-10-25 อยู่ใน
+`matcher` ของ `middleware.ts` แล้ว แต่ไม่ถูก redirect** หน้าที่บังคับล็อกอินกำหนดด้วย
+`PROTECTED_PREFIXES` ใน `lib/auth/protectedPaths.ts` ไม่ใช่ด้วย matcher อีกต่อไป
+เหตุผล: `PublicLayout` เรียก `getSession()` ซึ่งเป็น server component เขียนคุกกี้ไม่ได้
+คุกกี้ session ที่ถูกเพิกถอนจึงค้าง แล้ว supabase-js พิมพ์ `refresh_token_not_found` ทุกครั้งที่เปิด
+หน้าแรก (Next dev overlay ขึ้นเป็น error) middleware เป็นที่เดียวที่ล้างคุกกี้นั้นได้
+**เพิ่มหน้าใหม่ที่ต้องล็อกอิน ต้องใส่ทั้ง `PROTECTED_PREFIXES` และ `matcher`** —
+`navItems.test.ts` ตรวจทั้งสองทิศ · `/auth/*` ยังต้องอยู่นอก matcher
 
 `app/page.tsx` เดิมถูกลบและย้ายเข้ากลุ่ม พร้อม**เอา redirect ไป `/dashboard` ออก** —
 ของเดิมทำให้เจ้าของระบบดูหน้าแนะนำของตัวเองไม่ได้เลยเวลาล็อกอินอยู่

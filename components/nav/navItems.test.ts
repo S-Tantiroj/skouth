@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { NAV_ITEMS, sidebarItems, topRightItems, pageTitle } from './navItems'
+import { PROTECTED_PREFIXES, isProtectedPath } from '@/lib/auth/protectedPaths'
 
 // ตัด '/:path*' ออกจากแต่ละรายการใน matcher เหลือคำนำหน้า
 // '/admin/:path*' -> '/admin'
@@ -38,23 +39,39 @@ test('รายการที่กั้นด้วย role เป็นส�
   expect(gated).toEqual(['/admin/users', '/candidates', '/import'])
 })
 
-test('ทุก href ที่ต้องล็อกอิน ถูกครอบด้วย matcher ของ middleware', () => {
-  // เพิ่มเมนูชี้ไปหน้าใหม่แล้วลืมใส่ใน matcher = หน้านั้นเปิดได้โดยไม่ต้องล็อกอิน
+test('ทุก href ที่ต้องล็อกอิน อยู่ในรายการหน้าที่บังคับล็อกอิน', () => {
+  // เพิ่มเมนูชี้ไปหน้าใหม่แล้วลืมใส่ในรายการ = หน้านั้นเปิดได้โดยไม่ต้องล็อกอิน
   // และไม่มีอาการอะไรให้สังเกตเลยเพราะเมนูทำงานปกติ
-  const prefixes = matcherPrefixes()
-  expect(prefixes.length).toBeGreaterThan(0)
   for (const i of NAV_ITEMS) {
     if (i.requiresAuth === false) continue
-    expect(isCovered(i.href, prefixes)).toBe(true)
+    expect(isProtectedPath(i.href)).toBe(true)
   }
 })
 
-test('/help ต้องไม่ถูกครอบด้วย matcher', () => {
-  // ทิศตรงข้าม — เผลอใส่ /help เข้า matcher แล้วคนที่ยังไม่ล็อกอินอ่านคู่มือไม่ได้
-  // ข้อห้ามนี้เขียนไว้ใน CLAUDE.md แล้วแต่ยังไม่เคยมีอะไรดัก
+test('ทุกหน้าที่บังคับล็อกอิน มี middleware ทำงานอยู่จริง', () => {
+  // รายการบังคับล็อกอินไม่มีผลถ้า matcher ไม่ครอบหน้านั้น — middleware จะไม่ถูกเรียกเลย
+  const prefixes = matcherPrefixes()
+  for (const p of PROTECTED_PREFIXES) expect(isCovered(p, prefixes)).toBe(true)
+})
+
+test('/help ต้องไม่บังคับล็อกอิน', () => {
+  // ทิศตรงข้าม — /help อยู่ใน matcher ได้ (เพื่อล้างคุกกี้ที่หมดอายุ) แต่ต้องไม่ถูก redirect
   const help = NAV_ITEMS.find((i) => i.href === '/help')
   expect(help?.requiresAuth).toBe(false)
-  expect(isCovered('/help', matcherPrefixes())).toBe(false)
+  for (const p of ['/', '/help', '/terms', '/privacy', '/login', '/signup', '/auth/confirm']) {
+    expect(isProtectedPath(p)).toBe(false)
+  }
+})
+
+test('/auth/* ต้องอยู่นอก matcher', () => {
+  // /auth/confirm ต้องตั้ง session จากลิงก์อีเมลเองฝั่งเบราว์เซอร์ก่อน (ดู CLAUDE.md Phase 6)
+  expect(isCovered('/auth/confirm', matcherPrefixes())).toBe(false)
+})
+
+test('isProtectedPath เทียบที่ขอบเส้นทาง', () => {
+  expect(isProtectedPath('/search')).toBe(true)
+  expect(isProtectedPath('/search/x')).toBe(true)
+  expect(isProtectedPath('/searching')).toBe(false)
 })
 
 test('sidebarItems กรองตาม role', () => {

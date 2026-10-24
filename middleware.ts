@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { isProtectedPath } from '@/lib/auth/protectedPaths'
 
 // Protects app routes: unauthenticated users are redirected to /login.
 // และต่ออายุ session ให้ทุกคำขอ — ที่นี่เป็นจุดเดียวที่เขียนคุกกี้ใหม่กลับไปที่เบราว์เซอร์ได้แน่นอน
@@ -32,8 +33,8 @@ export async function middleware(req: NextRequest) {
   // API ผ่าน middleware เพื่อต่ออายุ session เท่านั้น — ไม่ redirect เพราะผู้เรียกคือ fetch
   // แต่ละ route ตรวจสิทธิ์เองและตอบ 401/403 อยู่แล้ว
   if (path.startsWith('/api/')) return res
-  const isAuthPage = path.startsWith('/login') || path.startsWith('/signup')
-  if (!user && !isAuthPage) {
+  // หน้าสาธารณะผ่าน middleware เพื่อต่ออายุ/ล้างคุกกี้เท่านั้น ไม่ redirect
+  if (!user && isProtectedPath(path)) {
     return NextResponse.redirect(new URL('/login', req.url))
   }
   return res
@@ -51,5 +52,10 @@ export const config = {
     '/settings/:path*',
     '/self-assessment/:path*',
     '/api/:path*',
+    // หน้าสาธารณะ — ต่ออายุหรือล้างคุกกี้ที่หมดอายุ ไม่บังคับล็อกอิน (ดู lib/auth/protectedPaths.ts)
+    '/',
+    '/help',
+    '/terms',
+    '/privacy',
   ],
 }
