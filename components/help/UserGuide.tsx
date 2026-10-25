@@ -1,4 +1,4 @@
-import { GUIDE_SECTIONS } from '@/lib/help/guide'
+import { GUIDE_IMAGES, GUIDE_SECTIONS } from '@/lib/help/guide'
 
 // คู่มือบนเว็บ — เนื้อหาอยู่ที่ lib/help/guide.ts ไม่ได้อยู่ในไฟล์นี้
 //
@@ -30,6 +30,15 @@ export default function UserGuide() {
                 <li key={step}>{step}</li>
               ))}
             </ol>
+            {/* width/height จริงของไฟล์กันหน้ากระตุกตอนภาพโหลด · <img> ธรรมดาแทน next/image
+                เพราะเป็นภาพนิ่งในหน้าคู่มือ ไม่ต้องการการแปลงขนาดฝั่งเซิร์ฟเวอร์ */}
+            {(GUIDE_IMAGES[s.id] ?? []).map((img) => (
+              <figure key={img.src} className="guide-figure">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={img.src} alt={img.caption} width={img.width} height={img.height} loading="lazy" />
+                <figcaption>{img.caption}</figcaption>
+              </figure>
+            ))}
           </section>
         ))}
       </div>

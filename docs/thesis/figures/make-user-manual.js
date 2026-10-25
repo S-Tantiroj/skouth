@@ -9,8 +9,19 @@ const path = require('path')
 const ts = require(path.join(__dirname, '..', '..', '..', 'node_modules', 'typescript'))
 const {
   Document, Packer, Paragraph, TextRun, AlignmentType, LevelFormat, Table, TableRow, TableCell,
-  WidthType, BorderStyle, ShadingType, PageBreak, Header, PageNumber,
+  WidthType, BorderStyle, ShadingType, PageBreak, Header, PageNumber, ImageRun,
 } = require('docx')
+
+// ภาพประกอบอ่านจาก GUIDE_IMAGES ใน guide.ts ชุดเดียวกับหน้า /help (ไฟล์อยู่ public/help/ เบลอข้อมูลส่วนบุคคลแล้ว)
+// ภาพต้นทางคือภาพที่ 5-x ของบทที่ 5 — FROM บอกเลขภาพนั้นสำหรับคำบรรยายในเล่ม
+const FROM = {
+  'home.png': '5-1', 'confirm.png': '5-2', 'login.png': '5-3', 'dashboard.png': '5-4', 'search.png': '5-5',
+  'candidates.png': '5-6', 'candidate.png': '5-7', 'shortlist-panel.png': '5-8', 'shortlists.png': '5-8',
+  'job.png': '5-9', 'self.png': '5-10', 'import.png': '5-11', 'xray.png': '5-11', 'admin.png': '5-12',
+  'settings.png': '5-13', 'privacy.png': '5-14',
+}
+// ขนาดภาพ PNG อ่านจาก header (ไม่ต้องพึ่งไลบรารีภาพ)
+function pngSize(buf) { return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20) } }
 
 const ROOT = path.join(__dirname, '..', '..', '..')
 const src = fs.readFileSync(path.join(ROOT, 'lib', 'help', 'guide.ts'), 'utf8')
@@ -18,6 +29,7 @@ const js = ts.transpileModule(src, { compilerOptions: { module: ts.ModuleKind.Co
 const mod = { exports: {} }
 new Function('module', 'exports', js)(mod, mod.exports)
 const SECTIONS = mod.exports.GUIDE_SECTIONS
+const IMAGES = mod.exports.GUIDE_IMAGES
 
 const FONT = 'TH SarabunPSK'
 const SZ = 32 // 16 pt
@@ -66,6 +78,7 @@ const children = [
   ]),
 ]
 
+let fig = 0
 SECTIONS.forEach((s, i) => {
   children.push(heading(`ก.${i + 2} ${s.title}`))
   s.steps.forEach((step) => children.push(new Paragraph({
@@ -73,6 +86,24 @@ SECTIONS.forEach((s, i) => {
     alignment: AlignmentType.THAI_DISTRIBUTE, spacing: { after: 0, line: 240 },
     children: [run(step)],
   })))
+  for (const img of IMAGES[s.id] || []) {
+    const file = path.basename(img.src)
+    const cap = img.caption
+    const from = FROM[file]
+    if (!from) throw new Error(`ไม่รู้ว่า ${file} มาจากภาพที่เท่าไรของบทที่ 5 — เพิ่มใน FROM`)
+    const data = fs.readFileSync(path.join(ROOT, 'public', img.src))
+    const { w, h } = pngSize(data)
+    // กว้างไม่เกินพื้นที่พิมพ์ (≈ 540 px) และสูงไม่เกิน 380 px คงสัดส่วนเดิม
+    const k = Math.min(540 / w, 380 / h, 1)
+    fig += 1
+    children.push(new Paragraph({
+      alignment: AlignmentType.CENTER, spacing: { before: 160, after: 0 }, keepNext: true,
+      children: [new ImageRun({ type: 'png', data, transformation: { width: Math.round(w * k), height: Math.round(h * k) },
+        altText: { title: cap, description: cap, name: file } })],
+    }))
+    children.push(p([run(`ภาพที่ ก-${fig} `, { bold: true }), run(`${cap} (ภาพเดียวกับภาพที่ ${from})`)],
+      { alignment: AlignmentType.CENTER, spacing: { before: 60, after: 160 } }))
+  }
 })
 
 children.push(heading(`ก.${SECTIONS.length + 2} ข้อความที่พบบ่อยและวิธีแก้`))

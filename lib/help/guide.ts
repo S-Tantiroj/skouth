@@ -176,6 +176,38 @@ export const GUIDE_SECTIONS: GuideSection[] = [
   },
 ]
 
+// ภาพประกอบคู่มือ — ใช้ทั้งหน้า /help และภาคผนวก ก ของเล่ม (make-user-manual.js)
+// ไฟล์อยู่ที่ public/help/ ซึ่ง **เสิร์ฟเป็นไฟล์สาธารณะ** เปิดได้โดยไม่ต้องล็อกอิน
+// ภาพต้นทางมาจากภาพที่ 5-x ของบทที่ 5 และมีชื่อ ตำแหน่ง และอีเมลของคนจริง —
+// ทุกภาพในโฟลเดอร์นี้ต้องเบลอข้อมูลส่วนบุคคลแล้วเท่านั้น ห้ามวางภาพต้นฉบับ
+// key คือ id ของหัวข้อข้างบน (guide.test.ts ตรวจว่ามีจริงและไฟล์มีอยู่)
+export type GuideImage = { src: string; caption: string; width: number; height: number }
+
+export const GUIDE_IMAGES: Record<string, GuideImage[]> = {
+  login: [
+    { src: '/help/home.png', caption: 'หน้าแรกของระบบ', width: 1910, height: 755 },
+    { src: '/help/confirm.png', caption: 'หน้าหลังยืนยันอีเมล แจ้งว่าบัญชีรอผู้ดูแลระบบอนุมัติ', width: 1270, height: 293 },
+    { src: '/help/login.png', caption: 'หน้าเข้าสู่ระบบ', width: 1919, height: 798 },
+  ],
+  dashboard: [{ src: '/help/dashboard.png', caption: 'หน้า Dashboard และแถบเมนูด้านซ้าย', width: 1271, height: 447 }],
+  search: [{ src: '/help/search.png', caption: 'หน้าค้นหาผู้สมัคร แผงตัวกรอง และผลการค้นหา', width: 1627, height: 850 }],
+  candidate: [{ src: '/help/candidate.png', caption: 'หน้าผู้สมัครหลังกดประเมินความเหมาะสม', width: 1325, height: 485 }],
+  shortlist: [
+    { src: '/help/shortlist-panel.png', caption: 'แผงบันทึกเข้า Shortlist', width: 871, height: 451 },
+    { src: '/help/shortlists.png', caption: 'หน้า Shortlist', width: 1258, height: 593 },
+  ],
+  jobs: [{ src: '/help/job.png', caption: 'หน้ารายละเอียดตำแหน่งงานและผู้สมัครที่เข้าเกณฑ์', width: 1292, height: 626 }],
+  self: [{ src: '/help/self.png', caption: 'หน้าประเมินตัวเองหลังกดยืนยันและวิเคราะห์', width: 1009, height: 768 }],
+  data: [{ src: '/help/candidates.png', caption: 'หน้าข้อมูลผู้สมัคร', width: 1622, height: 497 }],
+  import: [
+    { src: '/help/import.png', caption: 'หน้านำเข้าข้อมูล', width: 1273, height: 259 },
+    { src: '/help/xray.png', caption: 'แท็บค้นหาเพิ่มเติม (X-ray Search)', width: 968, height: 759 },
+  ],
+  admin: [{ src: '/help/admin.png', caption: 'หน้าจัดการผู้ใช้', width: 1247, height: 376 }],
+  settings: [{ src: '/help/settings.png', caption: 'หน้าตั้งค่า', width: 436, height: 827 }],
+  privacy: [{ src: '/help/privacy.png', caption: 'หน้านโยบายความเป็นส่วนตัว', width: 800, height: 715 }],
+}
+
 // ส่วนที่ 1 ของ docs/uat/skouth-uat.md — ต้องตรงกับไฟล์บนดิสก์เป๊ะ
 // (guide.test.ts เทียบแบบตัวต่อตัว) หัวข้อ `## ส่วนที่ 1` และเส้นคั่นท้าย
 // ไม่รวมอยู่ในนี้ สคริปต์ sync เป็นคนวางกรอบ

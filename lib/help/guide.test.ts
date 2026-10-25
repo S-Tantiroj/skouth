@@ -1,5 +1,5 @@
-import { readFileSync } from 'node:fs'
-import { GUIDE_SECTIONS, renderGuideMarkdown } from './guide'
+import { existsSync, readFileSync } from 'node:fs'
+import { GUIDE_IMAGES, GUIDE_SECTIONS, renderGuideMarkdown } from './guide'
 
 const DOC = 'docs/uat/skouth-uat.md'
 
@@ -25,4 +25,26 @@ test('ทุกหัวข้อมี id ไม่ซ้ำและมีข�
   const ids = GUIDE_SECTIONS.map((s) => s.id)
   expect(new Set(ids).size).toBe(ids.length)
   for (const s of GUIDE_SECTIONS) expect(s.steps.length).toBeGreaterThan(0)
+})
+
+test('ภาพประกอบผูกกับหัวข้อที่มีอยู่จริง และไฟล์อยู่ใน public/help', () => {
+  // id ที่พิมพ์ผิดทำให้ภาพหายจากหน้าเว็บเงียบๆ ส่วนไฟล์ที่ไม่มีอยู่ทำให้เห็นกรอบภาพแตก
+  const ids = new Set(GUIDE_SECTIONS.map((s) => s.id))
+  for (const [id, imgs] of Object.entries(GUIDE_IMAGES)) {
+    expect(ids.has(id)).toBe(true)
+    for (const img of imgs) {
+      expect(img.src.startsWith('/help/')).toBe(true)
+      expect(existsSync(`public${img.src}`)).toBe(true)
+    }
+  }
+})
+
+test('width/height ของภาพตรงกับไฟล์จริง', () => {
+  // ค่าผิดทำให้ภาพบนหน้า /help ยืดผิดสัดส่วน — อ่านขนาดจาก header ของ PNG
+  for (const imgs of Object.values(GUIDE_IMAGES)) {
+    for (const img of imgs) {
+      const buf = readFileSync(`public${img.src}`)
+      expect([buf.readUInt32BE(16), buf.readUInt32BE(20)]).toEqual([img.width, img.height])
+    }
+  }
 })
