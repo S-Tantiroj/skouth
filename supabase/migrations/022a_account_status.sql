@@ -14,14 +14,10 @@
 -- เคยถูกปฏิเสธมาก่อน
 create type account_status as enum ('pending', 'approved', 'rejected');
 
--- `default 'pending'` ทำให้คนที่สมัครหลังจากนี้ติดคิวเอง **โดยไม่ต้องแก้ trigger
--- handle_new_user()** ซึ่ง insert แค่ (id, display_name, role) — คอลัมน์ที่ไม่ได้ระบุ
--- จะได้ค่า default
+-- ค่าตั้งต้น 'pending' ทำให้บัญชีใหม่รออนุมัติโดยไม่ต้องแก้ trigger
 alter table profiles add column status account_status not null default 'pending';
 
--- **บรรทัดนี้สลับที่กับบรรทัดบนไม่ได้ และห้ามลืม** — ไม่งั้นบัญชีที่มีอยู่ทั้งหมด
--- รวมถึงผู้ดูแลระบบจะกลายเป็น pending พร้อมกัน แล้วไม่เหลือใครที่กดอนุมัติได้เลย
--- กู้ได้ทางเดียวคือกลับมาที่ SQL editor นี้
+-- ต้องรันหลัง add column: บัญชีเดิมทั้งหมดรวมถึงผู้ดูแลระบบได้รับอนุมัติ
 update profiles set status = 'approved';
 
 -- **ไม่เพิ่ม `status` เข้า `grant update` ของ migration 019 โดยตั้งใจ**

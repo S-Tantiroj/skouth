@@ -71,8 +71,7 @@ export default function SaveToShortlist({
     setBusy((b) => [...b, listId])
     setMsg('')
     try {
-      // **`upsert` ไม่ใช่ `insert`** — กดซ้ำจากหน้าที่ข้อมูลเก่าจะไม่กลายเป็น
-      // error เรื่องคีย์ซ้ำ ซึ่งเป็นความล้มเหลวที่ผู้ใช้แก้อะไรไม่ได้
+      // upsert แทน insert: กดซ้ำแล้วไม่เกิด error คีย์ซ้ำ
       const { error } =
         plan.kind === 'add'
           ? await db
@@ -85,7 +84,7 @@ export default function SaveToShortlist({
               .eq('candidate_id', candidateId)
 
       if (error) {
-        // ไม่ส่งข้อความ Postgres ดิบให้ผู้ใช้ — มันบอกชื่อตารางและคอลัมน์
+        // ไม่ส่งข้อความ Postgres ดิบให้ผู้ใช้
         console.error('shortlist toggle failed:', error.message)
         setMsg(plan.kind === 'add' ? 'บันทึกไม่สำเร็จ' : 'เอาออกไม่สำเร็จ')
         return

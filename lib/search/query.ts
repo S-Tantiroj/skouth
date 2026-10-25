@@ -84,9 +84,7 @@ export async function searchCandidates(
   const db = getServerClient()
   const emb = await queryEmbedding(semanticQuery)
 
-  // **กรองเฉพาะสกิลที่มีจริงในฐาน** ดูเหตุผลเต็มใน lib/search/knownSkills.ts
-  // สั้นๆ คือ RPC เทียบสกิลแบบตรงตัวและต้องครบทุกตัว ส่วน AI แต่งชื่อสกิลขึ้นเองได้
-  // ชื่อที่ไม่มีอยู่จริงจึงตัดทุกคนทิ้ง แล้วคำค้นอย่าง "Data Scientist" คืนศูนย์
+  // ใช้เฉพาะทักษะที่มีจริงในฐาน ชื่อที่ AI แต่งขึ้นจะตัดผู้สมัครทิ้งทั้งหมด
   const chips = filters.skills ?? []
   let usableSkills = chips
   let unusedSkills: string[] = []
@@ -98,18 +96,10 @@ export async function searchCandidates(
       usableSkills = split.usable
       unusedSkills = split.unknown
     }
-    // known เป็น null แปลว่าอ่านรายชื่อไม่ได้ — ใช้ชิปตามที่ได้มา (พฤติกรรมเดิม)
+    // อ่านรายชื่อไม่ได้: ใช้ตัวกรองตามที่ได้มา
   }
 
-  // **ต้องเช็ค error ของ RPC** ไม่ใช่ทิ้งไว้แล้วอ่านแต่ data
-  //
-  // เกิดขึ้นจริง 2026-09-07: migration ตั้ง search_path ของ RPC เป็น public เฉยๆ
-  // ทำให้ตัวดำเนินการ `<=>` ของ pgvector (อยู่ใน schema `extensions`) หาไม่เจอ
-  // RPC จึง error ทุกครั้ง แต่โค้ดตรงนี้อ่านแค่ data ซึ่งเป็น null แล้วคืน []
-  // **หน้าเว็บจึงขึ้นว่า "ไม่พบผลลัพธ์" ทั้งที่การค้นหาพังสนิท** ไม่มี log ไม่มีสัญญาณ
-  // อะไรเลย ใช้เวลาไล่หาสาเหตุนานกว่าที่ควรมาก
-  //
-  // "ไม่เจอใครตรงเงื่อนไข" กับ "ค้นหาไม่ได้" เป็นคนละเรื่องและต้องแยกให้ออก
+  // ต้องเช็ค error ไม่งั้น RPC ที่พังจะแสดงเป็น "ไม่พบผลลัพธ์"
   const { data: matches, error: rpcError } = await db.rpc('match_candidates_filtered', {
     query_embedding: emb,
     match_count: 20,
@@ -123,7 +113,7 @@ export async function searchCandidates(
     throw new Error('search rpc failed')
   }
 
-  // PostgREST serializes float as a numeric string over the API — coerce to number.
+  // PostgREST ส่งค่าทศนิยมมาเป็นสตริง จึงแปลงเป็นตัวเลข
   const sims = new Map<string, number>((matches ?? []).map((m: any) => [m.id, Number(m.similarity)]))
   const ids = [...sims.keys()]
   if (!ids.length) return { results: [], unusedSkills }

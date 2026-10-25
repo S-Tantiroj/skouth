@@ -45,18 +45,11 @@ export function decideAccess(row: unknown, hadError: boolean): AccessDecision {
     return { allowed: false, reason: 'bad-role' }
   }
 
-  // **ตรวจสถานะหลัง role เสมอ** — แถวที่ข้อมูลเพี้ยนต้องถูกจับว่าเพี้ยน ไม่ใช่ถูกรายงาน
-  // ว่า "รออนุมัติ" แล้วไปโผล่ในคิวให้ผู้ดูแลกดอนุมัติบัญชีที่พัง
+  // ตรวจ role ก่อน status เพื่อไม่ให้บัญชีที่ข้อมูลเพี้ยนเข้าคิวรออนุมัติ
   const status = (row as { status?: unknown }).status
   if (status === 'rejected') return { allowed: false, reason: 'rejected' }
 
-  // **ทุกค่าที่ไม่ใช่ 'approved' ปิดประตู รวมถึงค่าที่ไม่มีเลย** หลักเดียวกับ
-  // `ROLE_RANK[unknown] ?? 0` ใน hasRole — ถ้าให้ status ที่หายไปแปลว่าผ่าน
-  // วันไหนมีคนลืม `.select('status')` ทุกคนจะเข้าได้หมดโดยไม่มีสัญญาณใดเลย
-  // ซึ่งเป็นความพังชนิดที่หาสาเหตุยากที่สุด
-  //
-  // ค่าที่อยู่นอก enum ไปรวมกับ 'pending' โดยตั้งใจ — คอลัมน์เป็น enum ที่ not null
-  // ค่านอกรายการจึงเกิดจากฐานข้อมูลจริงไม่ได้ เหลือแต่ทางเทสต์
+  // ทุกค่าที่ไม่ใช่ 'approved' ถูกปฏิเสธ รวมถึงกรณีที่ไม่มีค่า
   if (status !== 'approved') return { allowed: false, reason: 'pending' }
 
   return { allowed: true, role: role as Role }

@@ -25,8 +25,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
 
   const { id } = await ctx.params
 
-  // body ที่ไม่ใช่ JSON ต้องได้ 400 ไม่ใช่ 500 ที่อธิบายไม่ได้ — POST /api/jobs
-  // เดิมไม่มี try/catch เลยและเจอปัญหาแบบเดียวกัน
+  // body ที่ไม่ใช่ JSON ตอบ 400
   let body: unknown
   try {
     body = await req.json()
@@ -39,18 +38,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     return NextResponse.json({ error: 'สถานะไม่ถูกต้อง' }, { status: 400 })
   }
 
-  // **ตรวจทุกอย่างก่อนแตะฐานข้อมูล** — ประตูที่อยู่หลังการเขียนคืนสถานะถูก
-  // แต่ข้อมูลเปลี่ยนไปแล้วจริง
-  //
-  // **กันการล็อกตัวเองออก** หลักเดียวกับ `lib/auth/roleChange.ts` — endpoint นี้เป็น
-  // ทางเดียวในแอปที่เปลี่ยนสถานะได้ แอดมินที่ปฏิเสธตัวเองจะเข้าระบบไม่ได้อีก และถ้า
-  // เป็นแอดมินคนเดียวจะไม่เหลือใครกู้ให้ ต้องไปแก้ที่ Supabase SQL editor
-  // ห้ามแม้แต่การอนุมัติตัวเอง เพราะแอดมินที่ผ่าน `getSession()` มาถึงบรรทัดนี้ได้
-  // ย่อมเป็น `approved` อยู่แล้ว คำขอนั้นจึงไม่มีเหตุผลที่ถูกต้องสักกรณี
-  //
-  // **ข้อจำกัดที่บันทึกไว้ตรงๆ:** กฎนี้ไม่รับประกันว่าจะเหลือแอดมินที่ใช้งานได้เสมอ
-  // แอดมินสองคนที่ปฏิเสธกันและกันพร้อมกันจะผ่านทั้งคู่ — กันเฉพาะความผิดพลาด
-  // คลิกเดียวที่เกิดจริงได้ง่ายที่สุด แทนการอ้างว่าปิดสนิท
+  // ตรวจทุกอย่างก่อนเขียน · แอดมินเปลี่ยนสถานะตัวเองไม่ได้ (กันล็อกตัวเองออก)
   if (id === session.userId) {
     return NextResponse.json(
       { error: 'เปลี่ยนสถานะบัญชีของตัวเองไม่ได้' },
@@ -60,8 +48,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
 
   const db = getServerClient()
 
-  // อ่านค่าเดิมไว้ก่อน เพื่อให้บันทึกกิจกรรมอ่านรู้เรื่องแม้ผู้ใช้คนนั้นถูกลบทีหลัง
-  // (หลักการเดียวกับ summary ของการเปลี่ยน role — ไม่ join กลับทีหลัง)
+  // อ่านค่าเดิมไว้ใช้ในบันทึกกิจกรรม
   const { data: before } = await db
     .from('profiles')
     .select('display_name, email, status')
@@ -74,8 +61,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     .eq('id', id)
 
   if (error) {
-    // ห้ามส่งข้อความ Postgres ดิบออกไป — บอกชื่อตาราง ชื่อคอลัมน์ และบางครั้งค่าในแถว
-    // ฝั่งเซิร์ฟเวอร์ยังเก็บข้อความเต็มไว้เหมือนเดิม
+    // ไม่ส่งข้อความ Postgres ดิบออกไป
     console.error('account status update failed:', error.message)
     return NextResponse.json(
       { error: 'เปลี่ยนสถานะบัญชีไม่สำเร็จ กรุณาลองใหม่' },
@@ -83,9 +69,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     )
   }
 
-  // บันทึก **หลัง** เขียนสำเร็จ — บันทึกว่าทำสำเร็จทั้งที่ล้มเหลวแย่กว่าไม่มีบันทึก
-  // เพราะมันทำให้หลักฐานโกหก · `logActivity` กลืน error เองอยู่แล้ว การบันทึกล้ม
-  // จึงไม่ทำให้คำขอที่สำเร็จแล้วกลายเป็นล้มเหลว
+  // บันทึกกิจกรรมหลังเขียนสำเร็จเท่านั้น
   const who = before ? identityName(before, id) : id
   await logActivity({
     actorId: session.userId,

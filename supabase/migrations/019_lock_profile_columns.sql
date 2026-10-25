@@ -32,23 +32,10 @@
 
 revoke update on public.profiles from anon, authenticated;
 
--- display_name — ผู้ใช้ตั้งชื่อที่แสดงของตัวเอง (หน้า /settings)
--- settings    — ข้อความความต้องการที่ใช้บ่อย (หน้า /settings)
---
--- **role ไม่อยู่ในรายการนี้โดยตั้งใจ** และ id ก็ไม่อยู่ (id เป็น FK ไป auth.users
--- การแก้ได้แปลว่าย้ายแถวไปทับบัญชีอื่น)
+-- ผู้ใช้แก้ได้เฉพาะ display_name และ settings (หน้า /settings) ไม่รวม role และ id
 grant update (display_name, settings) on public.profiles to authenticated;
 
--- ---------------------------------------------------------------------------
--- ป้องกันเชิงลึก: ถอนสิทธิ์เขียนที่ไม่มีใครใช้
--- ---------------------------------------------------------------------------
--- INSERT  — แถวใน profiles สร้างโดย trigger handle_new_user() ซึ่งเป็น SECURITY DEFINER
---           จึงรันด้วยสิทธิ์ของเจ้าของฟังก์ชัน ไม่ได้ใช้สิทธิ์ของ authenticated
--- DELETE  — ไม่มีเส้นทางในแอปที่ลบ profiles จากเบราว์เซอร์
--- TRUNCATE — **TRUNCATE ไม่อยู่ใต้ RLS เลย** ต่างจาก DELETE ที่ policy กันไว้ได้
---            ตอนนี้ยังยิงผ่าน PostgREST ไม่ได้เพราะ REST รองรับแค่สี่คำสั่งพื้นฐาน
---            แต่สิทธิ์ที่ไม่มีใครต้องใช้ไม่ควรมีอยู่ ถ้าวันหน้ามีเส้นทาง SQL อื่นเปิดขึ้น
---            (เช่น RPC ที่เขียนพลาด) นี่คือสิ่งที่จะทำให้ตารางผู้ใช้ทั้งตารางหายไป
+-- ถอนสิทธิ์เขียนที่ไม่มีใครใช้ (TRUNCATE ไม่อยู่ใต้ RLS)
 revoke insert, delete, truncate, references, trigger on public.profiles
   from anon, authenticated;
 

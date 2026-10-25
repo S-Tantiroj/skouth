@@ -39,26 +39,19 @@ Rules:
 
 Request: ${nl}`
 
-  // ห้ามโยน error ออกจากฟังก์ชันนี้เด็ดขาด
-  //
-  // การจัดอันดับจริงใช้ embedding ซึ่งเป็นคนละ endpoint กับโมเดลตอบข้อความ และ
-  // ยังทำงานปกติแม้ตอนที่ฝั่ง generate ล่ม การปล่อยให้ error หลุดออกไปจะทำให้
-  // "ค้นหา" พังทั้งหน้าเพราะสกัด chip ไม่ได้ ทั้งที่ยังค้นแบบ semantic ได้สบาย
-  //
-  // ตัวชิปเป็นของเสริม ไม่ใช่แกน — เสียชิปยังค้นเจอ เสียการค้นหาคือใช้งานไม่ได้เลย
+  // ห้ามโยน error: ตัวกรองเป็นส่วนเสริม ถ้าล้มยังค้นหาด้วยข้อความได้
   let parsed: any = {}
   try {
     const res = await withTimeout(
       getGemini().models.generateContent({
         model: MODEL_FAST,
         contents: prompt,
-        // Force strict JSON output (no markdown fences / prose) so complex queries
-        // parse reliably instead of falling back to a plain semantic search.
+        // บังคับให้ตอบเป็น JSON ล้วน
         config: { responseMimeType: 'application/json' },
       })
     )
     const raw = (res.text ?? '').replace(/```json|```/g, '').trim()
-    // Extract the JSON object even if the model wraps it in prose.
+    // ดึงเฉพาะก้อน JSON แม้แบบจำลองจะตอบมีข้อความปน
     const start = raw.indexOf('{')
     const end = raw.lastIndexOf('}')
     parsed = JSON.parse(start >= 0 && end > start ? raw.slice(start, end + 1) : raw)

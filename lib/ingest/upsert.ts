@@ -15,10 +15,7 @@ export async function upsertCandidate(
 ): Promise<{ id: string | null; updated: boolean; suppressed: boolean }> {
   const db = getServerClient()
 
-  // เช็ครายชื่อระงับก่อน embed เสมอ — ไม่เสียโควตากับคนที่จะไม่ถูกเขียนอยู่แล้ว
-  //
-  // การเช็คอยู่ที่นี่ ไม่ใช่ในสคริปต์ เพราะกติกาของโปรเจกต์คือทุกเส้นทาง ingest ลงที่ไฟล์นี้
-  // ถ้าเช็คแค่ในสคริปต์ วันที่ใครเอา CSV ชุดเดิมมาวางที่ /import ด้วยมือ คนที่ขอให้ลบจะกลับเข้ามาใหม่
+  // ตรวจรายชื่อระงับก่อน embed — ทุกเส้นทางนำเข้าผ่านจุดนี้
   if (input.linkedin_url) {
     const { data: blocked } = await db
       .from('suppressed_profiles')

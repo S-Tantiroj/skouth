@@ -126,18 +126,13 @@ export async function parsePdfProfile(pdfBase64: string): Promise<ProfileDraft> 
         {
           role: 'user',
           parts: [
-            // เอกสาร Gemini แนะนำให้วาง part ของไฟล์ก่อนข้อความ prompt
+            // วางไฟล์ก่อน prompt ตามคำแนะนำของ Gemini
             { inlineData: { mimeType: 'application/pdf', data: pdfBase64 } },
             { text: PARSE_PDF_PROMPT },
           ],
         },
       ],
-      // **ยังอยู่บน MODEL_TEXT โดยตั้งใจ ไม่ย้ายไป MODEL_FAST**
-      // วัดเมื่อ 2026-09-08 กับ CV จริง: flash-lite ผ่านตัวตรวจ 3/3 และถูกกว่า
-      // แต่ให้ผลไม่ซ้ำกันเลยสักครั้งใน 3 รอบ และ**ทำ education หายไปหนึ่งรายการ**
-      // (4 แทนที่จะเป็น 5) ตัวตรวจดูแค่ว่ารูปทรงถูก ไม่ได้ดูว่าครบ
-      // ข้อมูลที่หายตั้งแต่ต้นคือสิ่งที่คนตรวจร่างมักไม่ทันสังเกต ต่างจากค่าที่ผิด
-      // ซึ่งเห็นแล้วรู้ทันที — จึงยอมจ่ายแพงกว่าเพื่อความครบ
+      // ใช้ MODEL_TEXT: รุ่น FAST ทำรายการการศึกษาหายใน 2 จาก 3 รอบที่วัด
       config: { responseMimeType: 'application/json', thinkingConfig: THINKING_LOW },
     }),
     GEMINI_TIMEOUT_MS

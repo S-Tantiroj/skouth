@@ -36,8 +36,7 @@ export async function updateJob(
   }
   if (!before) return null
 
-  // source/external_id เป็นข้อมูลที่มาของแถว ไม่ใช่เนื้อหา route ตัดทิ้งไปแล้ว
-  // ตัดซ้ำที่นี่เพราะฟังก์ชันนี้อาจถูกเรียกจากที่อื่นในอนาคต
+  // ตัด source/external_id ซ้ำอีกชั้น (เป็นข้อมูลที่มาของแถว ไม่ใช่เนื้อหา)
   const { source: _source, external_id: _externalId, ...safe } = patch
   const after = { ...(before as unknown as JobInput), ...safe }
 
@@ -51,12 +50,7 @@ export async function updateJob(
     throw new Error('job update failed')
   }
 
-  // **ลบหลังบันทึกสำเร็จเท่านั้น** — ถ้าลบก่อนแล้วการบันทึกล้ม จะเสีย cache ไปฟรีๆ
-  // ทั้งที่งานยังเป็นข้อความเดิม ลำดับนี้เลือกจากว่าความล้มเหลวแบบไหนแย่น้อยกว่า
-  //
-  // แถวพวกนี้ hash ไม่ตรงกับข้อความใหม่แล้วจึงไม่มีวันถูกอ่านอีก และเพราะ job_id
-  // ยังชี้ไปที่งานที่ยังอยู่ มันจะไม่ถูก cascade กวาดตอนไหนเลย ไม่ลบตอนนี้เท่ากับ
-  // ทุกครั้งที่แก้งานจะทิ้งขยะเพิ่มถาวร
+  // ลบผลประเมินเดิมหลังบันทึกสำเร็จเท่านั้น (hash เดิมจะไม่ถูกอ่านอีก)
   let staleScoresRemoved = 0
   if (requirementTextChanged(before as unknown as JobInput, after)) {
     const { data: removed, error: delError } = await db
@@ -65,8 +59,7 @@ export async function updateJob(
       .eq('job_id', id)
       .select('id')
     if (delError) {
-      // ไม่โยนออกไป — งานถูกบันทึกสำเร็จแล้ว บอกผู้ใช้ว่า "ล้มเหลว" ตอนนี้จะผิด
-      // แถวที่เหลือไม่มีใครอ่านได้อยู่แล้ว (hash ไม่ตรง) จึงไม่ทำอันตรายอะไร
+      // ไม่โยน error: งานถูกบันทึกแล้ว
       console.error('stale analyses cleanup failed:', delError)
     } else {
       staleScoresRemoved = (removed ?? []).length

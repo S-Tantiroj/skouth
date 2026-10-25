@@ -13,10 +13,7 @@ export async function scoreCandidateAgainst(
   const db = getServerClient()
   const hash = requirementHash(requirement)
 
-  // **อ่าน cache พังแล้วไปต่อ ไม่โยน** — คำนวณใหม่ยังได้คำตอบที่ถูก แค่แพงกว่า
-  // การทำให้ทั้งคำขอล้มเพราะ cache อ่านไม่ได้คือการทำให้แย่กว่าเดิม
-  // แต่ต้อง log ไว้ ไม่งั้นการที่ cache ใช้ไม่ได้จะเงียบสนิท เห็นแค่ค่า Gemini
-  // ที่สูงผิดปกติโดยไม่รู้ว่าทำไม
+  // อ่าน cache ไม่ได้: บันทึก log แล้วคำนวณใหม่ ไม่ทำให้คำขอล้ม
   const { data: cached, error: cacheError } = await db
     .from('analyses')
     .select('score,reasoning')
@@ -28,11 +25,7 @@ export async function scoreCandidateAgainst(
     return { score: (cached as any).score, reasoning: (cached as any).reasoning, cached: true }
   }
 
-  // **ต้องแยก "ไม่มีผู้สมัครคนนี้" ออกจาก "ฐานข้อมูลพัง"**
-  // เดิมใช้ `.single()` ซึ่งคืน data = null ทั้งสองกรณี แล้วโยน 'candidate not found'
-  // เหมือนกัน ส่วน route แปลงข้อความนั้นเป็น 404 ผลคือฐานข้อมูลล่มแล้วผู้ใช้เห็นว่า
-  // "ไม่พบผู้สมัครคนนี้" แล้วไปตามหาสาเหตุผิดที่
-  // `.maybeSingle()` คืน error = null เมื่อไม่มีแถว จึงแยกสองกรณีนี้ออกจากกันได้
+  // maybeSingle แยก "ไม่พบผู้สมัคร" (404) ออกจาก "อ่านฐานข้อมูลไม่ได้" (500)
   const { data: c, error: candidateError } = await db
     .from('candidates')
     .select('*, education(*), experience(*), candidate_skills(skills(name))')
@@ -55,12 +48,8 @@ export async function scoreCandidateAgainst(
   }
 
   const result = await analyzeCandidate(profile as any, requirement)
-  // job_id ทำให้ลบงานแล้ว cascade กวาดแถวนี้ให้เอง และทำให้นับได้ว่างานนี้มีคะแนน
-  // cache ไว้กี่คน ผู้เรียกจากหน้าผู้สมัครไม่มีงานผูกอยู่จึงส่ง undefined มา
-  //
-  // **ไม่โยน error ตอนเขียน cache ล้ม** — คะแนนคำนวณเสร็จแล้วและถูกต้อง การเขียน
-  // cache เป็นผลพลอยได้ ถ้าโยนออกไปผู้ใช้จะเห็นว่าล้มเหลวทั้งที่ได้คำตอบแล้ว
-  // (เหตุผลเดียวกับ logActivity ใน lib/activity/log.ts)
+  // job_id: ลบงานแล้วผลประเมินถูกลบตาม (ค่าว่างเมื่อประเมินจากหน้าผู้สมัคร)
+  // เขียน cache ไม่สำเร็จไม่โยน error เพราะได้คะแนนแล้ว
   const { error: insertError } = await db.from('analyses').insert({
     candidate_id: candidateId,
     requirement_text: requirement,
