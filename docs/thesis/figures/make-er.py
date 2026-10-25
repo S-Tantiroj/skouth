@@ -64,6 +64,25 @@ FK = {
  ('suppressed_profiles','created_by'): 'profiles(id)', ('activity_log','actor_id'): 'profiles(id)',
 }
 
+# ---------- ชื่อที่ใช้ในเอกสาร (ภาพ ER และตารางข้อมูล) ----------
+# ในฐานข้อมูลจริงคีย์หลักทุกตารางชื่อ `id` — เอกสารเรียกด้วยชื่อเฉพาะของแต่ละตาราง
+# เพื่อให้อ่านความสัมพันธ์ได้ง่าย และ FK ที่อ้างคีย์นั้นใช้ชื่อเดียวกัน (เช่น education.can_id)
+# FK ที่ชี้ไป profiles คงชื่อตามบทบาท (owner_id · created_by · reviewed_by · actor_id)
+# T และ FK ข้างบนยังเป็นชื่อจริงทั้งหมด — แปลงเฉพาะตอนแสดงผลผ่าน doc() / docref()
+PKN = {
+ 'auth.users': 'auth_id', 'profiles': 'user_id', 'candidates': 'can_id', 'education': 'edu_id',
+ 'experience': 'exp_id', 'skills': 'skill_id', 'jobs': 'job_id', 'analyses': 'ana_id',
+ 'shortlists': 'sl_id', 'self_profiles': 'sp_id', 'resume_assessments': 'ra_id',
+ 'ingest_runs': 'run_id', 'pending_candidates': 'pend_id', 'suppressed_profiles': 'sup_id',
+ 'activity_log': 'log_id',
+}
+FKN = {'candidate_id': 'can_id', 'shortlist_id': 'sl_id', 'profile_id': 'sp_id', 'ingest_run_id': 'run_id'}
+def doc(table, col):
+    if col == 'id': return PKN[table]
+    return FKN.get(col, col)
+def docref(ref):   # 'candidates(id)' -> 'candidates(can_id)'
+    t = ref.split('(')[0]; return f'{t}({PKN[t]})'
+
 def esc(s): return s.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
 
 class Fig:
@@ -81,7 +100,7 @@ class Fig:
             bold = 'bold' if 'PK' in k else 'normal'
             s.o.append(f'<text x="{x+6}" y="{yy}" font-family="{FONT}" font-size="10.5" font-weight="bold">{k.replace(",","/")}</text>')
             ul = ' text-decoration="underline"' if 'PK' in k else ''
-            s.o.append(f'<text x="{x+52}" y="{yy}" font-family="{FONT}" font-size="12" font-weight="{bold}"{ul}>{esc(c)}</text>')
+            s.o.append(f'<text x="{x+52}" y="{yy}" font-family="{FONT}" font-size="12" font-weight="{bold}"{ul}>{esc(doc(name, c))}</text>')
             s.o.append(f'<text x="{x+W-6}" y="{yy}" font-family="{FONT}" font-size="11" fill="#444" text-anchor="end">{esc(t)}</text>')
         if note:
             s.o.append(f'<text x="{x}" y="{y+h+15}" font-family="{FONT}" font-size="10.5" font-style="italic" fill="#444">{esc(note)}</text>')

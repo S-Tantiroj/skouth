@@ -22,7 +22,7 @@ const SIZE_TABLE = 28   // 14pt — ขนาดที่นิยมใช้�
 const py = `
 import io, re, json, sys
 here = sys.argv[1]
-src = io.open(here + '/make-er.py', encoding='utf-8').read(); ns = {}; exec(src.split('def esc')[0], ns); T = ns['T']; FK = ns['FK']
+src = io.open(here + '/make-er.py', encoding='utf-8').read(); ns = {}; exec(src.split('def esc')[0], ns); T = ns['T']; FK = ns['FK']; doc = ns['doc']; docref = ns['docref']
 dd = io.open(here + '/../2026-09-08-data-dictionary.md', encoding='utf-8').read()
 FKDESC = {
  ('profiles','id'): 'รหัสผู้ใช้',
@@ -70,8 +70,10 @@ for m in re.finditer(r'^## ตารางที่ (3-\\d+) \`([a-z_.]+)\` — 
         # คำอธิบาย FK เขียนรูปแบบเดียวกันทุกแถว: ความหมาย · ตารางที่อ้างอิง · ผลเมื่อลบแถวแม่
         # (ผลเมื่อลบตรงกับ pg_constraint และตารางที่ 3-16)
         if ref:
-            d = FKDESC[(name, col)] + ' อ้างอิง ' + ref + ' · ' + ONDEL[(name, col)]
-        rows.append([str(i), col, t.replace('int4', 'integer'), key, d])
+            d = FKDESC[(name, col)] + ' อ้างอิง ' + docref(ref) + ' · ' + ONDEL[(name, col)]
+        # ชื่อคอลัมน์แสดงตามชื่อในเอกสาร (doc) ส่วนคำอธิบายค้นด้วยชื่อจริง
+        if col == 'id': d = d + ' (ในฐานข้อมูลชื่อคอลัมน์ id)' if d else 'รหัสประจำแถว (ในฐานข้อมูลชื่อคอลัมน์ id)'
+        rows.append([str(i), doc(name, col), t.replace('int4', 'integer'), key, d])
     out.append({'no': no, 'name': name, 'title': title, 'rows': rows})
 if missing: sys.exit('ไม่มีคำอธิบายใน data-dictionary.md: ' + ', '.join(missing))
 print(json.dumps(out, ensure_ascii=False))

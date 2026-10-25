@@ -4,7 +4,7 @@
 <text x="165.0" y="317.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">profiles</text>
 <line x1="86" y1="326" x2="86" y2="364" stroke="#000" stroke-width="0.8"/>
 <text x="46" y="339.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK/FK</text>
-<text x="92" y="339.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="92" y="339.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">user_id</text>
 <text x="284" y="339.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
 <text x="46" y="358.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
 <text x="92" y="358.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">…</text>
@@ -15,7 +15,7 @@
 <text x="525.0" y="47.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">self_profiles</text>
 <line x1="446" y1="56" x2="446" y2="227" stroke="#000" stroke-width="0.8"/>
 <text x="406" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK</text>
-<text x="452" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="452" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">sp_id</text>
 <text x="644" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
 <text x="406" y="88.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">FK</text>
 <text x="452" y="88.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">owner_id</text>
@@ -46,10 +46,10 @@
 <text x="915.0" y="47.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">resume_assessments</text>
 <line x1="836" y1="56" x2="836" y2="189" stroke="#000" stroke-width="0.8"/>
 <text x="796" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK</text>
-<text x="842" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="842" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">ra_id</text>
 <text x="1034" y="69.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
 <text x="796" y="88.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">FK</text>
-<text x="842" y="88.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">profile_id</text>
+<text x="842" y="88.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">sp_id</text>
 <text x="1034" y="88.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
 <text x="796" y="107.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
 <text x="842" y="107.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">requirement_text</text>
@@ -71,7 +71,7 @@
 <text x="525.0" y="287.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">activity_log</text>
 <line x1="446" y1="296" x2="446" y2="467" stroke="#000" stroke-width="0.8"/>
 <text x="406" y="309.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK</text>
-<text x="452" y="309.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="452" y="309.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">log_id</text>
 <text x="644" y="309.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
 <text x="406" y="328.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">FK</text>
 <text x="452" y="328.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">actor_id</text>
@@ -102,7 +102,7 @@
 <text x="525.0" y="577.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">suppressed_profiles</text>
 <line x1="446" y1="586" x2="446" y2="700" stroke="#000" stroke-width="0.8"/>
 <text x="406" y="599.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK</text>
-<text x="452" y="599.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="452" y="599.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">sup_id</text>
 <text x="644" y="599.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
 <text x="406" y="618.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">UQ</text>
 <text x="452" y="618.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">linkedin_url</text>
@@ -124,10 +124,10 @@
 <text x="915.0" y="287.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">pending_candidates</text>
 <line x1="836" y1="296" x2="836" y2="505" stroke="#000" stroke-width="0.8"/>
 <text x="796" y="309.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK</text>
-<text x="842" y="309.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="842" y="309.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">pend_id</text>
 <text x="1034" y="309.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
 <text x="796" y="328.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">FK</text>
-<text x="842" y="328.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">ingest_run_id</text>
+<text x="842" y="328.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">run_id</text>
 <text x="1034" y="328.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
 <text x="796" y="347.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">UQ</text>
 <text x="842" y="347.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">linkedin_url</text>
@@ -161,7 +161,7 @@
 <text x="915.0" y="577.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">ingest_runs</text>
 <line x1="836" y1="586" x2="836" y2="833" stroke="#000" stroke-width="0.8"/>
 <text x="796" y="599.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK</text>
-<text x="842" y="599.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="842" y="599.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">run_id</text>
 <text x="1034" y="599.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
 <text x="796" y="618.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
 <text x="842" y="618.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">trigger</text>
@@ -204,10 +204,10 @@
 <text x="165.0" y="737.5" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" text-anchor="middle">candidates</text>
 <line x1="86" y1="746" x2="86" y2="803" stroke="#000" stroke-width="0.8"/>
 <text x="46" y="759.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">PK</text>
-<text x="92" y="759.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">id</text>
+<text x="92" y="759.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-decoration="underline">can_id</text>
 <text x="284" y="759.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
 <text x="46" y="778.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold">FK</text>
-<text x="92" y="778.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">ingest_run_id</text>
+<text x="92" y="778.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">run_id</text>
 <text x="284" y="778.5" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#444" text-anchor="end">uuid</text>
 <text x="46" y="797.5" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="bold"></text>
 <text x="92" y="797.5" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="normal">…</text>
