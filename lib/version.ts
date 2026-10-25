@@ -11,10 +11,10 @@
 export const APP_NAME = 'Skouth'
 
 /** ต้องตรงกับ `version` ใน package.json — มีเทสต์ตรึงไว้ */
-export const APP_VERSION = '1.1.1'
+export const APP_VERSION = '1.1.2'
 
 /** ต้องตรงกับ `name` ใน package.json */
 export const PACKAGE_NAME = 'skouth'
 
-/** ข้อความที่แสดงจริง เช่น "Skouth v1.1.1" */
+/** ข้อความที่แสดงจริง เช่น "Skouth v1.1.2" */
 export const versionLabel = () => `${APP_NAME} v${APP_VERSION}`
