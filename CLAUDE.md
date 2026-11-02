@@ -612,6 +612,10 @@ Spec/plan: `docs/superpowers/{specs,plans}/2026-08-24-scraper-automation*`
   Actions: write (fine-grained PAT จำกัด repo `skouth`) แทน Contents: write ที่แก้โค้ดได้
   `ingest_runs.trigger` = `'scheduled' | 'manual' | 'webhook'` ผ่าน `lib/ingest/ingestTrigger.ts`
   (input `source` ของ workflow → env `RUN_SOURCE`) ไม่ต้อง migration เพราะคอลัมน์เป็น text
+- **คิวรอตรวจห้ามเขียนทับการตัดสินของคน** (`lib/ingest/pendingQueue.ts`, แก้ 2026-11-02)
+  เดิม sync upsert `status: 'pending'` ทุกรอบ แถวที่อนุมัติ/ปฏิเสธแล้วจึงกลับเข้าคิว (เกิดจริง)
+  ตอนนี้อ่านสถานะก่อน เขียนได้เฉพาะเมื่อไม่มีแถวหรือยังเป็น `pending` · ถูกข้ามนับเป็น
+  `skipped_unchanged` เพราะ `ingest_runs` ไม่มีคอลัมน์แยก (เพิ่ม key ใหม่ใน `counts` = update พัง)
 - **ตรวจแหล่งข้อมูลทดแทนแล้ว 2026-10-14 — ไม่มีทางไหนผ่าน**
   `docs/superpowers/specs/2026-10-14-automated-ingest-feasibility.md`
   **อ่านก่อนเสียเวลาประเมินซ้ำ** · วัดด้วยการรันจริง ไม่ใช่อ่านเอกสาร:

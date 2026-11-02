@@ -6,6 +6,7 @@ import { upsertCandidate } from '../lib/ingest/upsert'
 import { embedHash } from '../lib/ingest/embedHash'
 import { classifyRow } from '../lib/ingest/classify'
 import { ingestTrigger } from '../lib/ingest/ingestTrigger'
+import { planPendingWrite } from '../lib/ingest/pendingQueue'
 import {
   readPhantombusterConfig,
   describePhantombusterConfig,
@@ -110,6 +111,22 @@ async function main() {
         const missing = classifyRow(input)
 
         if (missing.length) {
+          // คนที่ถูกตรวจไปแล้ว (อนุมัติ/ปฏิเสธ) ห้ามดึงกลับเข้าคิว — ดู lib/ingest/pendingQueue.ts
+          // อ่านพังให้โยนเป็น error ของแถวนี้ ไม่เดาว่า "ไม่มีแถว" แล้วเขียนทับการตัดสินของคน
+          if (input.linkedin_url) {
+            const { data: queued, error: queueReadError } = await db
+              .from('pending_candidates')
+              .select('status')
+              .eq('linkedin_url', input.linkedin_url)
+              .maybeSingle()
+            if (queueReadError) throw new Error(`pending queue read failed: ${queueReadError.message}`)
+            if (planPendingWrite((queued as any)?.status) === 'skip') {
+              // นับรวมกับ skipped_unchanged เพราะ ingest_runs ไม่มีคอลัมน์แยก และความหมายใกล้กัน:
+              // รอบนี้ไม่มีอะไรเปลี่ยนจากการตัดสินที่มีอยู่
+              counts.skipped_unchanged++
+              continue
+            }
+          }
           counts.pending++
           if (!DRY_RUN && input.linkedin_url) {
             await db.from('pending_candidates').upsert(
