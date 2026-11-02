@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { getBrowserClient } from '@/lib/supabase/client'
+import { formatThaiDate } from '@/lib/format/thaiTime'
 
 // **`self_profiles` ไม่มีคอลัมน์ `full_name`** — ชื่ออยู่ใน `parsed_data` jsonb
 // (migration 011: id, owner_id, file_name, raw_text, parsed_data, assessment,
@@ -104,7 +105,7 @@ export default function DeleteSelfDataCard() {
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: 500 }}>{label}</div>
                   <div className="muted" style={{ fontSize: 12 }}>
-                    {String(r.created_at ?? '').slice(0, 10)}
+                    {formatThaiDate(r.created_at)}
                   </div>
                 </div>
                 <button

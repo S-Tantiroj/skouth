@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ACTION_LABELS } from '@/lib/activity/log'
 import type { ActivityRow } from '@/lib/activity/read'
+import { formatThaiDate } from '@/lib/format/thaiTime'
 
 const when = (iso: string) => {
   const mins = Math.round((Date.now() - new Date(iso).getTime()) / 60000)
@@ -10,7 +11,7 @@ const when = (iso: string) => {
   if (hrs < 24) return `${hrs} ชั่วโมงที่แล้ว`
   const days = Math.round(hrs / 24)
   if (days < 30) return `${days} วันที่แล้ว`
-  return iso.slice(0, 10)
+  return formatThaiDate(iso)
 }
 
 const TONE: Record<string, string> = {

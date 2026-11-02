@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { formatThaiDate } from '@/lib/format/thaiTime'
 
 export type SuppressedRow = {
   id: string
@@ -52,7 +53,7 @@ export default function SuppressedList({ rows }: { rows: SuppressedRow[] }) {
                   <a href={r.linkedin_url} target="_blank" rel="noreferrer">เปิด ↗</a>
                 </td>
                 <td className="muted">{r.reason ?? '—'}</td>
-                <td className="muted">{String(r.created_at ?? '').slice(0, 10)}</td>
+                <td className="muted">{formatThaiDate(r.created_at)}</td>
                 <td>
                   <button className="btn btn-ghost" onClick={() => remove(r.id)} disabled={busy}>
                     ถอนออก

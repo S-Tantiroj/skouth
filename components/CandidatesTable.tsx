@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { MISSING_LABELS, type MissingField } from '@/lib/candidates/quality'
 import { isReimportable } from '@/lib/candidates/remove'
 import DeleteCandidatesDialog, { type DeleteTarget } from './DeleteCandidatesDialog'
+import { formatThaiDate } from '@/lib/format/thaiTime'
 
 export type CandidateRow = {
   id: string
@@ -182,7 +183,7 @@ export default function CandidatesTable({
                 <td className="muted">{r.location ?? '—'}</td>
                 <td className="muted">{r.source}</td>
                 <td className="muted">{r.years_experience ?? '—'}</td>
-                <td className="muted">{r.updated_at.slice(0, 10)}</td>
+                <td className="muted">{formatThaiDate(r.updated_at)}</td>
                 <td>
                   {r.duplicate && <span className="badge-issue badge-issue--dup">ชื่อซ้ำ</span>}
                   {r.missing.map((m) => (

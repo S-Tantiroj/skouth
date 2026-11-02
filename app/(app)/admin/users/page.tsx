@@ -5,6 +5,7 @@ import { getServerClient } from '@/lib/supabase/server'
 import RoleSelect from '@/components/RoleSelect'
 import AccountStatusActions from '@/components/AccountStatusActions'
 import { CONFIRMATION_LABELS, confirmationMap, confirmationOf } from '@/lib/auth/emailConfirmation'
+import { formatThaiDate } from '@/lib/format/thaiTime'
 
 export const dynamic = 'force-dynamic'
 
@@ -84,7 +85,7 @@ export default async function AdminUsers() {
                             ภาษาอังกฤษจะแสดง MM/DD/YYYY ที่คนไทยอ่านสลับกับ DD/MM/YYYY
                             ได้ง่าย เป็นบทเรียนเดียวกับที่ `lib/self/monthYear.ts` บันทึกไว้ */}
                         <div className="faint" style={{ fontSize: 12 }}>
-                          สมัครเมื่อ {String(u.created_at ?? '').slice(0, 10)}
+                          สมัครเมื่อ {formatThaiDate(u.created_at)}
                         </div>
                         {(() => {
                           const c = confirmationOf(confirmations, u.id)

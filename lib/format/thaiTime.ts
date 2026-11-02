@@ -26,3 +26,8 @@ export function formatThaiDateTime(value: string | null | undefined): string {
   const p = Object.fromEntries(FORMATTER.formatToParts(d).map((x) => [x.type, x.value]))
   return `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}`
 }
+
+/** วันที่ตามเวลาไทย `YYYY-MM-DD` — ใช้แทน `.slice(0, 10)` ที่ได้วันของ UTC */
+export function formatThaiDate(value: string | null | undefined): string {
+  return formatThaiDateTime(value).slice(0, 10)
+}
