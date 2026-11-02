@@ -6,6 +6,7 @@ import {
   readPhantombusterConfig,
   PHANTOMBUSTER_VARS,
 } from '@/lib/ingest/phantombusterConfig'
+import { formatThaiDateTime } from '@/lib/format/thaiTime'
 
 export const dynamic = 'force-dynamic'
 
@@ -124,7 +125,7 @@ export default async function AutoImportPage() {
             <tbody>
               {(runs ?? []).map((r: any) => (
                 <tr key={r.id}>
-                  <td className="muted">{String(r.started_at ?? '').slice(0, 16).replace('T', ' ')}</td>
+                  <td className="muted">{formatThaiDateTime(r.started_at)}</td>
                   <td className="muted">{r.source} · {r.trigger}</td>
                   <td>{r.imported}</td>
                   <td>{r.updated}</td>
