@@ -1211,6 +1211,16 @@ import ตรง ส่วนส่วนที่ 1 ของ `docs/uat/skouth-
 ข้อมูลมาจากแหล่งสาธารณะจะไม่มีวันเข้ามาอ่านหน้านี้ กฎหมายกำหนดให้ต้องแจ้งเจ้าของข้อมูล
 เมื่อเก็บจากแหล่งอื่น การมีหน้าเว็บเป็นเพียงส่วนหนึ่งของการทำหน้าที่นั้น ไม่ใช่ทั้งหมด
 
+## Vercel Function region = `sin1` (สิงคโปร์) ผ่าน `vercel.json`
+
+**ต้องอยู่ region เดียวกับ Supabase (`ap-southeast-1`)** วัดจริง 2026-11-02 ก่อนตั้ง: `x-vercel-id`
+เป็น `sin1::iad1::…` คือ edge อยู่สิงคโปร์แต่โค้ดรันที่วอชิงตัน (ค่าตั้งต้นของ Vercel) ทุกครั้งที่คุยกับ
+ฐานข้อมูลต้องข้ามแปซิฟิกไปกลับราว 200 ms หน้าแบบ dynamic ที่ยังไม่ล็อกอินใช้ 300–380 ms
+ส่วนหน้าหลังล็อกอินมีการเรียก Supabase ต่อกันทีละครั้ง 12–14 รอบ (middleware + `getSession` ใน layout
+และในหน้าซ้ำกัน + query ทีละตัว) จึงช้าเป็นวินาที · **Hobby ใส่ได้ region เดียว** ใส่เกินแล้ว deploy ล้ม ·
+ค่าใน `vercel.json` ชนะค่าในหน้า Settings · ตรวจหลัง deploy: `x-vercel-id` ต้องขึ้น `sin1::sin1::…`
+งานที่ยังไม่ทำ: `loading.tsx` ใน `(app)`, ห่อ `getSession` ด้วย React `cache()`, ใช้ `Promise.all` ในแดชบอร์ด
+
 ## Gemini free-tier note
 
 Free tier = 5 generate requests/min per model. Do NOT call the generation model
