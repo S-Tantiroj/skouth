@@ -53,10 +53,15 @@ export default async function AutoImportPage() {
           <p style={{ marginTop: 0 }}>
             <span className="status-pill status-pill--ok">ตั้งค่าครบแล้ว</span>
           </p>
+          <p className="faint" style={{ fontSize: 13 }}>
+            การดึงข้อมูลเริ่มได้สองทาง — กด <strong>Run workflow</strong> ของ{' '}
+            <code>sync-candidates</code> บน GitHub Actions หรือให้ PhantomBuster เรียก webhook{' '}
+            <code>/api/webhooks/phantombuster?secret=…</code> เมื่อ phantom รันเสร็จ
+            (ตั้งที่ Advanced Notification Settings ของ phantom)
+          </p>
           <p className="faint" style={{ fontSize: 13, marginBottom: 0 }}>
-            ถ้ายังไม่มีประวัติการรันด้านล่าง ให้ตรวจว่าตาราง <code>schedule:</code> ใน{' '}
-            <code>.github/workflows/sync-candidates.yml</code> ถูกเปิดคอมเมนต์ออกแล้ว
-            — การตั้ง secret อย่างเดียวไม่ทำให้มันเริ่มทำงานเอง
+            ตาราง <code>schedule:</code> ใน <code>.github/workflows/sync-candidates.yml</code>{' '}
+            เป็นทางเลือกเสริม — การตั้ง secret อย่างเดียวไม่ทำให้มันรันตามเวลาเอง
           </p>
         </div>
       )}

@@ -591,8 +591,27 @@ Spec/plan: `docs/superpowers/{specs,plans}/2026-08-24-scraper-automation*`
   **Node 24 เป็น Active LTS ถึง เม.ย. 2028** ไม่เลือก 22 เพราะอยู่ช่วง Maintenance
   และหมดอายุ เม.ย. 2027 ส่วน Node 20 หมดอายุไปตั้งแต่ เม.ย. 2026 แล้ว
   **GitHub ถอด Node 20 ออกจาก runner 23 ก.ย. 2026** หลังจากนั้น action v4 พังจริง
-- ยังไม่ได้ยืนยัน `lib/ingest/phantombuster.ts` กับ API จริง (ยังไม่มีบัญชี) แยกไฟล์ไว้
-  เพื่อให้แก้จุดเดียวเมื่อพบรูปร่างจริง
+- **ยืนยัน `lib/ingest/phantombuster.ts` กับ API จริงแล้ว 2026-11-02** — phantom
+  LinkedIn Search Export (agent `1955470235787672`) ไฟล์ผลลัพธ์ 12 แถว → 11 เข้า
+  `candidates` 1 เข้าคิว · รันซ้ำได้ `skipped_unchanged` 11 ไม่เกิดข้อมูลซ้ำ ·
+  secret 5 ตัวใน GitHub Actions และ `PHANTOMBUSTER_API_KEY`/`PHANTOMBUSTER_AGENT_ID`
+  ใน Vercel (เพื่อให้ `/import/auto` แสดงสถานะ) ตั้งครบแล้ว · ตาราง cron ยังปิดอยู่
+  **สคริปต์ดึงแค่ไฟล์ผลลัพธ์ของการรันล่าสุดของ phantom** ไม่ใช่รายชื่อสะสมในหน้า LinkedIn leads
+- **webhook: phantom รันเสร็จ → `/api/webhooks/phantombuster?secret=…` → สั่ง GitHub รัน
+  workflow** (`lib/ingest/webhookGate.ts` + `lib/ingest/githubDispatch.ts`)
+  Spec/plan: `docs/superpowers/{specs,plans}/2026-11-02-phantombuster-webhook*`
+  env ใน Vercel: `PHANTOMBUSTER_WEBHOOK_SECRET`, `GITHUB_DISPATCH_TOKEN` (ชนิด Secret)
+  **PhantomBuster ถอด webhook เมื่อได้ status 4xx** — route จึงตอบ 4xx เฉพาะรหัสลับผิด
+  ความผิดฝั่งเรา (env ไม่ได้ตั้ง, GitHub ล้ม) ตอบ 503/502 ส่วน phantom ล้มเหลว/agent อื่น/
+  body เสีย ตอบ 200 แล้วไม่ทำอะไร · รหัสลับต้องอยู่ใน query เพราะ PhantomBuster ตั้ง header ไม่ได้ ·
+  เพดานเวลา webhook 11 วินาที แต่**รอ response header แค่ 5 วินาที** → timeout การเรียก GitHub 3.5 วินาที
+  (เคยตั้ง 8 วินาที ซึ่งเกินช่วงรอ header — final review จับได้) · `PHANTOMBUSTER_AGENT_ID` ใน Vercel
+  ว่าง = 503 ไม่ใช่ 200 · รหัสลับใช้ hex เท่านั้น (`+` ใน query ถูก decode เป็นช่องว่าง → 401 → webhook ถูกถอด) ·
+  body เกิน 4.5 MB Vercel ตอบ 413 ก่อนถึง route → webhook ถูกถอด แก้ในโค้ดไม่ได้ จำกัดจำนวนผลต่อรอบของ phantom ไว้
+  **ใช้ `workflow_dispatch` API ไม่ใช่ `repository_dispatch` โดยตั้งใจ** — token ต้องการแค่
+  Actions: write (fine-grained PAT จำกัด repo `skouth`) แทน Contents: write ที่แก้โค้ดได้
+  `ingest_runs.trigger` = `'scheduled' | 'manual' | 'webhook'` ผ่าน `lib/ingest/ingestTrigger.ts`
+  (input `source` ของ workflow → env `RUN_SOURCE`) ไม่ต้อง migration เพราะคอลัมน์เป็น text
 - **ตรวจแหล่งข้อมูลทดแทนแล้ว 2026-10-14 — ไม่มีทางไหนผ่าน**
   `docs/superpowers/specs/2026-10-14-automated-ingest-feasibility.md`
   **อ่านก่อนเสียเวลาประเมินซ้ำ** · วัดด้วยการรันจริง ไม่ใช่อ่านเอกสาร:

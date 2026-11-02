@@ -25,7 +25,16 @@ on:
   #   # GitHub ใช้ UTC ไม่ใช่เวลาไทย — 19:00 UTC = 02:00 ของวันถัดไปตามเวลากรุงเทพ
   #   # อย่าเปลี่ยนเป็น '0 2 * * *' เพราะนั่นคือ 09:00 เช้าตามเวลาไทย
   #   - cron: '0 19 * * *'
+  #
+  # workflow_dispatch มีสองทางเข้า: กด Run workflow เอง (source = manual)
+  # หรือ webhook จาก PhantomBuster ผ่าน /api/webhooks/phantombuster ซึ่งเรียก
+  # GitHub API พร้อม source = webhook — ค่านี้ไปเป็น ingest_runs.trigger
   workflow_dispatch:
+    inputs:
+      source:
+        description: 'ที่มาของการรัน'
+        required: false
+        default: 'manual'
 
 concurrency:
   group: sync-candidates
@@ -61,3 +70,4 @@ jobs:
           PHANTOMBUSTER_API_KEY: ${{ secrets.PHANTOMBUSTER_API_KEY }}
           PHANTOMBUSTER_AGENT_ID: ${{ secrets.PHANTOMBUSTER_AGENT_ID }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
+          RUN_SOURCE: ${{ inputs.source }}

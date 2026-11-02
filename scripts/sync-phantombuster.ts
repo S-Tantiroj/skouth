@@ -5,6 +5,7 @@ import { parseLinkedInCsv } from '../lib/ingest/linkedin'
 import { upsertCandidate } from '../lib/ingest/upsert'
 import { embedHash } from '../lib/ingest/embedHash'
 import { classifyRow } from '../lib/ingest/classify'
+import { ingestTrigger } from '../lib/ingest/ingestTrigger'
 import {
   readPhantombusterConfig,
   describePhantombusterConfig,
@@ -79,7 +80,7 @@ async function main() {
     const { data } = await db
       .from('ingest_runs')
       .insert({
-        trigger: process.env.GITHUB_EVENT_NAME === 'schedule' ? 'scheduled' : 'manual',
+        trigger: ingestTrigger(process.env.GITHUB_EVENT_NAME, process.env.RUN_SOURCE),
         source: 'phantombuster',
         criteria: { agentId },
         status: 'running',
