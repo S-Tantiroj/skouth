@@ -36,7 +36,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   if (result.suppressed) {
     return NextResponse.json(
-      { error: 'ผู้สมัครนี้อยู่ในรายชื่อระงับ ไม่สามารถนำเข้าได้' },
+      { error: 'บุคลากรเป้าหมายคนนี้อยู่ในรายชื่อระงับ ไม่สามารถนำเข้าได้' },
       { status: 409 }
     )
   }

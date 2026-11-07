@@ -13,7 +13,7 @@ export default function PublicFooter() {
   return (
     <>
       <footer className="pub-footer">
-        {APP_NAME} · ระบบสรรหาและประเมินผู้สมัคร
+        {APP_NAME} · ระบบสรรหาและประเมินบุคลากรเป้าหมาย
         <br />
         <Link href="/terms">ข้อกำหนดการใช้งาน</Link> ·{' '}
         <Link href="/privacy">นโยบายความเป็นส่วนตัว</Link> ·{' '}

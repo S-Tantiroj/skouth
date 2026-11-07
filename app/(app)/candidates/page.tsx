@@ -90,7 +90,7 @@ export default async function CandidatesListPage({
 
   return (
     <main>
-      <h1>ข้อมูลผู้สมัคร</h1>
+      <h1>ข้อมูลบุคลากรเป้าหมาย</h1>
       <CandidatesTable
         rows={rows}
         page={page}
@@ -107,7 +107,7 @@ export default async function CandidatesListPage({
       </div>
       <p className="faint" style={{ marginTop: 0, fontSize: 13 }}>
         การนำเข้า ลบ ระงับ อนุมัติ และแก้ไขข้อมูลของทุกคนในระบบ — บันทึกนี้อยู่รอด
-        แม้ผู้สมัครที่อ้างถึงจะถูกลบไปแล้ว
+        แม้บุคลากรเป้าหมายที่อ้างถึงจะถูกลบไปแล้ว
       </p>
       <ActivityList rows={activity} showActor empty="ยังไม่มีการเปลี่ยนแปลงข้อมูล" />
     </main>

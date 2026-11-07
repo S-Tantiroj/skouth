@@ -93,6 +93,11 @@ Full spec and plan live in `docs/superpowers/`:
   LinkedIn data. Generators enforce this: `generate.ts` and `parse.ts` output
   English. AI **reasoning/advice** (the `analyze` output) stays **Thai**.
 - **Match score:** integer 0–100 everywhere (search results and analysis use the same scale).
+- **ข้อความที่ผู้ใช้เห็นใช้คำว่า "บุคลากรเป้าหมาย" ไม่ใช่ "ผู้สมัคร"** (กรรมการสอบปริญญานิพนธ์สั่งแก้
+  2026-11) — "ผู้สมัคร" ทำให้เข้าใจว่าเป็นคนที่สมัครเข้ามาเอง ทั้งที่ระบบนี้ออกไปหาคนเชิงรุก
+  **เปลี่ยนเฉพาะข้อความที่แสดง** ชื่อตาราง `candidates` ตัวแปร route และคอมเมนต์ในโค้ดคงเดิม ·
+  prompt ใน `lib/gemini/analyze.ts` และ `assess.ts` ยังใช้คำเดิมโดยตั้งใจ (เป็นข้อความถึง model
+  ไม่ใช่ถึงผู้ใช้ เปลี่ยนแล้วผลคะแนนอาจขยับโดยไม่มีใครวัด) · ภาพหน้าจอใน `public/help/` ยังเป็นคำเดิม
 - **All ingestion paths land in one schema** (`candidates` + child tables) via
   `lib/ingest/upsert.ts`. `candidates.source` = `synthetic` | `csv` | `upload` | `scraper`.
   Adding a new source should only touch `lib/ingest`.

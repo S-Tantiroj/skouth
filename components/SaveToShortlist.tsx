@@ -94,7 +94,7 @@ export default function SaveToShortlist({
       const listName = all.find((l) => l.id === listId)?.name ?? 'shortlist'
       track(
         plan.kind === 'add' ? 'shortlist_add' : 'shortlist_remove',
-        `${candidateName ?? 'ผู้สมัคร'} ${plan.kind === 'add' ? '→' : '✕'} ${listName}`,
+        `${candidateName ?? 'บุคลากรเป้าหมาย'} ${plan.kind === 'add' ? '→' : '✕'} ${listName}`,
         listId
       )
       onChange?.()
@@ -147,12 +147,12 @@ export default function SaveToShortlist({
       if (addErr) {
         // รายการถูกสร้างแล้วจริง บอกว่า "ล้มเหลว" ทั้งหมดจะผิด — แยกสองเรื่องให้ชัด
         console.error('shortlist create+add failed:', addErr.message)
-        setMsg('สร้างรายการแล้ว แต่เพิ่มผู้สมัครไม่สำเร็จ ลองติ๊กอีกครั้ง')
+        setMsg('สร้างรายการแล้ว แต่เพิ่มบุคลากรเป้าหมายไม่สำเร็จ ลองติ๊กอีกครั้ง')
         return
       }
 
       setMember((m) => applyToggle(m, created.id, 'add'))
-      track('shortlist_add', `${candidateName ?? 'ผู้สมัคร'} → ${created.name}`, created.id)
+      track('shortlist_add', `${candidateName ?? 'บุคลากรเป้าหมาย'} → ${created.name}`, created.id)
       onChange?.()
     } catch {
       setMsg('เชื่อมต่อไม่ได้')

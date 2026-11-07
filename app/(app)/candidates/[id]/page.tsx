@@ -24,7 +24,7 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
     .eq('id', id)
     .single()
 
-  if (!c) return <main><p className="faint">ไม่พบผู้สมัคร</p></main>
+  if (!c) return <main><p className="faint">ไม่พบบุคลากรเป้าหมาย</p></main>
 
   // บันทึกการเปิดดูเพื่อให้ dashboard แสดง "ผู้สมัครที่เพิ่งดู"
   // ไม่ await เพราะเป็นผลพลอยได้ — ไม่ควรหน่วงการแสดงหน้า และ logActivity

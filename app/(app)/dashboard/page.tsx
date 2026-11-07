@@ -60,7 +60,7 @@ export default async function Dashboard() {
 
       <div className="metric-grid">
         <div className="metric">
-          <div className="metric-label">ผู้สมัครทั้งหมด</div>
+          <div className="metric-label">บุคลากรเป้าหมายทั้งหมด</div>
           <div className="metric-value">{count ?? 0}</div>
         </div>
         <div className="metric">
@@ -90,7 +90,7 @@ export default async function Dashboard() {
         <div className="card">
           <h3 style={{ marginTop: 0 }}>ทักษะที่พบบ่อย</h3>
           <p className="faint" style={{ fontSize: 12, marginTop: 0 }}>
-            10 อันดับแรก นับจากจำนวนผู้สมัครที่มีทักษะนั้น
+            10 อันดับแรก นับจากจำนวนบุคลากรเป้าหมายที่มีทักษะนั้น
           </p>
           {/* "อ่านไม่ได้" กับ "ยังไม่มีข้อมูล" ต้องแยกกัน — อย่างหลังเป็นคำตอบที่
               ผู้ใช้เชื่อได้ทันทีโดยไม่สงสัยอะไร ถ้าเอามาใช้ตอนระบบพังจะไม่มีใครรู้ */}
@@ -102,14 +102,14 @@ export default async function Dashboard() {
         </div>
 
         <div className="card">
-          <h3 style={{ marginTop: 0 }}>ผู้สมัครตามแหล่งที่มา</h3>
+          <h3 style={{ marginTop: 0 }}>บุคลากรเป้าหมายตามแหล่งที่มา</h3>
           <p className="faint" style={{ fontSize: 12, marginTop: 0 }}>
             ข้อมูลในระบบมาจากช่องทางใดบ้าง
           </p>
           {sources.failed ? (
             <p style={{ color: 'var(--bad)', fontSize: 13 }}>โหลดสถิติแหล่งที่มาไม่สำเร็จ</p>
           ) : (
-            <BarList items={sources.items} unit="คน" empty="ยังไม่มีผู้สมัครในระบบ" />
+            <BarList items={sources.items} unit="คน" empty="ยังไม่มีบุคลากรเป้าหมายในระบบ" />
           )}
         </div>
       </div>
@@ -130,7 +130,7 @@ export default async function Dashboard() {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span className="muted" style={{ fontSize: 12 }}>
-                  {sl.shortlist_candidates?.[0]?.count ?? 0} ผู้สมัคร
+                  {sl.shortlist_candidates?.[0]?.count ?? 0} บุคลากรเป้าหมาย
                 </span>
                 <span style={{ color: 'var(--accent)', fontSize: 13, fontWeight: 500 }}>เปิด →</span>
               </div>
@@ -163,7 +163,7 @@ export default async function Dashboard() {
       </div>
       <ActivityList
         rows={myActivity}
-        empty="ยังไม่มีกิจกรรมของคุณ — ลองค้นหาผู้สมัครแล้วเพิ่มเข้า shortlist ดู"
+        empty="ยังไม่มีกิจกรรมของคุณ — ลองค้นหาบุคลากรเป้าหมายแล้วเพิ่มเข้า shortlist ดู"
       />
     </main>
   )

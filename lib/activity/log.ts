@@ -41,7 +41,7 @@ export const NOISY_ACTIONS: Action[] = ['view']
 
 export const ACTION_LABELS: Record<Action, string> = {
   ingest: 'นำเข้าข้อมูล',
-  delete: 'ลบผู้สมัคร',
+  delete: 'ลบบุคลากรเป้าหมาย',
   suppress: 'ระงับการนำเข้า',
   approve: 'อนุมัติจากคิว',
   reject: 'ปฏิเสธจากคิว',

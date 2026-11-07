@@ -36,7 +36,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const url = (c as any).linkedin_url
   if (!url) {
     return NextResponse.json(
-      { error: 'ผู้สมัครนี้ไม่มี LinkedIn URL จึงป้องกันการนำเข้าซ้ำไม่ได้' },
+      { error: 'บุคลากรเป้าหมายคนนี้ไม่มี LinkedIn URL จึงป้องกันการนำเข้าซ้ำไม่ได้' },
       { status: 400 }
     )
   }

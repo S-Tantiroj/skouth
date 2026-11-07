@@ -113,7 +113,7 @@ export default function SearchPage() {
 
   return (
     <main>
-      <h1>ค้นหาผู้สมัคร</h1>
+      <h1>ค้นหาบุคลากรเป้าหมาย</h1>
 
       <div className="row" style={{ margin: '12px 0' }}>
         <input
@@ -188,7 +188,7 @@ export default function SearchPage() {
           คือตอนที่ผู้ใช้ต้องการคำอธิบายมากที่สุด (ดู lib/search/knownSkills.ts) */}
       {!err && unusedSkills.length > 0 && (
         <p className="faint" style={{ fontSize: 13 }}>
-          ไม่มีผู้สมัครคนไหนมีสกิล{' '}
+          ไม่มีบุคลากรเป้าหมายคนไหนมีสกิล{' '}
           <b>{unusedSkills.join(' · ')}</b>{' '}
           จึงไม่ถูกใช้เป็นตัวกรอง (ยังใช้จัดอันดับอยู่)
         </p>
@@ -196,7 +196,7 @@ export default function SearchPage() {
 
       {res.length > 0 && (
         <div className="section-header">
-          <h2>ผู้สมัคร {res.length} คน</h2>
+          <h2>บุคลากรเป้าหมาย {res.length} คน</h2>
           <span className="faint" style={{ fontSize: 12 }}>เรียงตามความใกล้เคียง</span>
         </div>
       )}
@@ -236,7 +236,7 @@ export default function SearchPage() {
           </div>
         ))}
       </div>
-      {ran && !searching && !err && res.length === 0 && <p className="faint">ไม่พบผู้สมัคร</p>}
+      {ran && !searching && !err && res.length === 0 && <p className="faint">ไม่พบบุคลากรเป้าหมาย</p>}
     </main>
   )
 }

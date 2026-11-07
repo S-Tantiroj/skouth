@@ -119,7 +119,7 @@ export default function ShortlistsPage() {
   const removeList = async (id: string, name: string, count: number) => {
     // **บอกจำนวนผู้สมัครในคำถาม** — "ลบ Shortlist นี้?" ไม่ได้บอกว่ากำลังจะเสียอะไร
     // รายการที่สะสมคนไว้ 30 คนกับรายการเปล่าดูเหมือนกันหมดถ้าไม่บอก
-    const detail = count > 0 ? `\n\nผู้สมัคร ${count} คนในรายการนี้จะถูกเอาออกด้วย` : ''
+    const detail = count > 0 ? `\n\nบุคลากรเป้าหมาย ${count} คนในรายการนี้จะถูกเอาออกด้วย` : ''
     if (!confirm(`ลบ Shortlist "${name}"?${detail}\n\nกู้คืนไม่ได้`)) return
 
     setBusy(true)
@@ -150,7 +150,7 @@ export default function ShortlistsPage() {
       .eq('candidate_id', candidateId)
     if (error) {
       console.error('remove from shortlist failed:', error.message)
-      return setErr('เอาผู้สมัครออกไม่สำเร็จ กรุณาลองใหม่')
+      return setErr('เอาบุคลากรเป้าหมายออกไม่สำเร็จ กรุณาลองใหม่')
     }
     track('shortlist_remove', `${who} ✕ ${listName}`, shortlistId)
     load()
@@ -255,7 +255,7 @@ export default function ShortlistsPage() {
                             removeCandidate(
                               sl.id,
                               sc.candidate_id,
-                              sc.candidates?.full_name ?? 'ผู้สมัคร',
+                              sc.candidates?.full_name ?? 'บุคลากรเป้าหมาย',
                               sl.name
                             )
                           }
@@ -265,7 +265,7 @@ export default function ShortlistsPage() {
                       </div>
                     ))}
                     {members.length === 0 && (
-                      <span className="faint">ยังไม่มีผู้สมัครในกลุ่มนี้</span>
+                      <span className="faint">ยังไม่มีบุคลากรเป้าหมายในกลุ่มนี้</span>
                     )}
                   </div>
                 </div>

@@ -69,5 +69,5 @@ export function splitKnownSkills(chips: string[], known: string[]): SkillSplit {
  */
 export function unusedSkillNotice(unknown: string[]): string {
   if (!unknown.length) return ''
-  return `ไม่มีผู้สมัครคนไหนมีสกิล ${unknown.join(' · ')} จึงไม่ถูกใช้เป็นตัวกรอง (ยังใช้จัดอันดับอยู่)`
+  return `ไม่มีบุคลากรเป้าหมายคนไหนมีสกิล ${unknown.join(' · ')} จึงไม่ถูกใช้เป็นตัวกรอง (ยังใช้จัดอันดับอยู่)`
 }

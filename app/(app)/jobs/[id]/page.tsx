@@ -58,7 +58,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
         )}
       </div>
 
-      <div className="section-header"><h2>ผู้สมัครที่เข้าเกณฑ์</h2></div>
+      <div className="section-header"><h2>บุคลากรเป้าหมายที่เข้าเกณฑ์</h2></div>
       <JobMatches jobId={id} />
     </main>
   )

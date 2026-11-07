@@ -56,7 +56,7 @@ export default function DeleteCandidatesDialog({
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: 480 }}>
-        <h2 className="modal-title">ลบ {many ? `${targets.length} รายการ` : 'ผู้สมัคร'}</h2>
+        <h2 className="modal-title">ลบ {many ? `${targets.length} รายการ` : 'บุคลากรเป้าหมาย'}</h2>
 
         {!many && <p style={{ fontWeight: 500, margin: '0 0 8px' }}>{targets[0].full_name}</p>}
 

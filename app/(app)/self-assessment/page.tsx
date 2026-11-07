@@ -51,7 +51,7 @@ export default async function SelfAssessmentPage() {
         </p>
         <p className="faint" style={{ fontSize: 13 }}>
           ข้อมูลนี้เป็นของคุณคนเดียว ผู้ดูแลระบบและผู้ใช้คนอื่นมองไม่เห็น
-          และจะไม่ถูกนำไปรวมกับฐานข้อมูลผู้สมัคร
+          และจะไม่ถูกนำไปรวมกับฐานข้อมูลบุคลากรเป้าหมาย
         </p>
         <SelfAssessmentStart label="อัปโหลดและตรวจข้อมูล" />
       </main>

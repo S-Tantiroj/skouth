@@ -37,8 +37,8 @@ export default function JobMatches({ jobId }: { jobId: string }) {
     setDeep((d) => ({ ...d, [candidateId]: { score: json.score, reasoning: json.reasoning } }))
   }
 
-  if (loading) return <p className="faint">กำลังจัดอันดับผู้สมัคร…</p>
-  if (!rows.length) return <p className="faint">ยังไม่มีผู้สมัครที่เข้าเกณฑ์</p>
+  if (loading) return <p className="faint">กำลังจัดอันดับบุคลากรเป้าหมาย…</p>
+  if (!rows.length) return <p className="faint">ยังไม่มีบุคลากรเป้าหมายที่เข้าเกณฑ์</p>
 
   return (
     <div className="stack">

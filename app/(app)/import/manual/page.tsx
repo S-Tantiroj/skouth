@@ -36,7 +36,7 @@ export default async function ManualImportPage() {
 
       <p className="faint" style={{ fontSize: 13 }}>
         แถวที่ขาดประวัติการทำงานหรือการศึกษาจะเข้า{' '}
-        <Link href="/import/pending">คิวรอตรวจ</Link> แทนที่จะเข้าฐานผู้สมัครทันที
+        <Link href="/import/pending">คิวรอตรวจ</Link> แทนที่จะเข้าฐานบุคลากรเป้าหมายทันที
       </p>
     </main>
   )

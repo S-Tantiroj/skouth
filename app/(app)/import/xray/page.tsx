@@ -33,7 +33,7 @@ export default async function XrayImportPage() {
       <p className="faint" style={{ fontSize: 13, marginTop: 0 }}>
         เปิดโปรไฟล์ที่หาเจอทีละคน แล้วกรอกลงไฟล์เทมเพลต แถวที่ขาดประวัติการทำงาน
         หรือการศึกษาจะเข้า <Link href="/import/pending">คิวรอตรวจ</Link>{' '}
-        แทนที่จะเข้าฐานผู้สมัครทันที
+        แทนที่จะเข้าฐานบุคลากรเป้าหมายทันที
       </p>
       <p className="faint" style={{ fontSize: 13 }}>
         <strong>สองข้อที่ผลการค้นหาของ Google ให้ไม่ครบ ต้องเปิดโปรไฟล์อ่านเอง</strong>

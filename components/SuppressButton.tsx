@@ -47,7 +47,7 @@ export default function SuppressButton({
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h2 className="modal-title">ลบ {fullName} และห้ามนำเข้าอีก</h2>
             <p className="muted" style={{ marginTop: 0 }}>
-              ข้อมูลของผู้สมัครนี้จะถูกลบถาวร และระบบจะไม่นำเข้าอีกไม่ว่าจะมาจากช่องทางใด
+              ข้อมูลของบุคลากรเป้าหมายคนนี้จะถูกลบถาวร และระบบจะไม่นำเข้าอีกไม่ว่าจะมาจากช่องทางใด
               การกระทำนี้ย้อนกลับไม่ได้
             </p>
             <div className="field-label">เหตุผล (เก็บเป็นหลักฐานการใช้สิทธิ์)</div>
