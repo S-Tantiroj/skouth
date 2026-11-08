@@ -185,27 +185,30 @@ export type GuideImage = { src: string; caption: string; width: number; height: 
 
 export const GUIDE_IMAGES: Record<string, GuideImage[]> = {
   login: [
-    { src: '/help/home.png', caption: 'หน้าแรกของระบบ', width: 1910, height: 755 },
+    { src: '/help/home.png', caption: 'หน้าแรกของระบบ', width: 1846, height: 832 },
     { src: '/help/confirm.png', caption: 'หน้าหลังยืนยันอีเมล แจ้งว่าบัญชีรอผู้ดูแลระบบอนุมัติ', width: 1270, height: 293 },
     { src: '/help/login.png', caption: 'หน้าเข้าสู่ระบบ', width: 1919, height: 798 },
   ],
-  dashboard: [{ src: '/help/dashboard.png', caption: 'หน้า Dashboard และแถบเมนูด้านซ้าย', width: 1271, height: 447 }],
-  search: [{ src: '/help/search.png', caption: 'หน้าค้นหาบุคลากรเป้าหมาย แผงตัวกรอง และผลการค้นหา', width: 1627, height: 850 }],
-  candidate: [{ src: '/help/candidate.png', caption: 'หน้าบุคลากรเป้าหมายหลังกดประเมินความเหมาะสม', width: 1325, height: 485 }],
+  dashboard: [
+    { src: '/help/dashboard.png', caption: 'หน้า Dashboard สถิติภาพรวมและกราฟ', width: 1610, height: 620 },
+    { src: '/help/dashboard-activity.png', caption: 'Shortlist ของคุณ บุคลากรเป้าหมายที่เพิ่งดู และกิจกรรมของคุณ', width: 1611, height: 906 },
+  ],
+  search: [{ src: '/help/search.png', caption: 'หน้าค้นหาบุคลากรเป้าหมาย แผงตัวกรอง และผลการค้นหา', width: 1597, height: 880 }],
+  candidate: [{ src: '/help/candidate.png', caption: 'หน้ารายละเอียดบุคลากรเป้าหมาย ไทม์ไลน์ และช่องประเมินความเหมาะสม', width: 1602, height: 877 }],
   shortlist: [
     { src: '/help/shortlist-panel.png', caption: 'แผงบันทึกเข้า Shortlist', width: 871, height: 451 },
     { src: '/help/shortlists.png', caption: 'หน้า Shortlist', width: 1258, height: 593 },
   ],
-  jobs: [{ src: '/help/job.png', caption: 'หน้ารายละเอียดตำแหน่งงานและบุคลากรเป้าหมายที่เข้าเกณฑ์', width: 1292, height: 626 }],
-  self: [{ src: '/help/self.png', caption: 'หน้าประเมินตัวเองหลังกดยืนยันและวิเคราะห์', width: 1009, height: 768 }],
-  data: [{ src: '/help/candidates.png', caption: 'หน้าข้อมูลบุคลากรเป้าหมาย', width: 1622, height: 497 }],
+  jobs: [{ src: '/help/job.png', caption: 'หน้ารายละเอียดตำแหน่งงานและบุคลากรเป้าหมายที่เข้าเกณฑ์', width: 1612, height: 657 }],
+  self: [{ src: '/help/self.png', caption: 'หน้าประเมินตัวเอง เลือกอัปโหลดไฟล์ PDF หรือกรอกข้อมูลเอง', width: 1612, height: 407 }],
+  data: [{ src: '/help/candidates.png', caption: 'หน้าข้อมูลบุคลากรเป้าหมาย', width: 1612, height: 772 }],
   import: [
     { src: '/help/import.png', caption: 'หน้านำเข้าข้อมูล', width: 1273, height: 259 },
-    { src: '/help/xray.png', caption: 'แท็บค้นหาเพิ่มเติม (X-ray Search)', width: 968, height: 759 },
+    { src: '/help/xray.png', caption: 'แท็บค้นหาเพิ่มเติม (X-ray Search)', width: 1602, height: 871 },
   ],
-  admin: [{ src: '/help/admin.png', caption: 'หน้าจัดการผู้ใช้', width: 1247, height: 376 }],
-  settings: [{ src: '/help/settings.png', caption: 'หน้าตั้งค่า', width: 436, height: 827 }],
-  privacy: [{ src: '/help/privacy.png', caption: 'หน้านโยบายความเป็นส่วนตัว', width: 800, height: 715 }],
+  admin: [{ src: '/help/admin.png', caption: 'หน้าจัดการผู้ใช้', width: 1615, height: 861 }],
+  settings: [{ src: '/help/settings.png', caption: 'หน้าตั้งค่า', width: 856, height: 897 }],
+  privacy: [{ src: '/help/privacy.png', caption: 'หน้านโยบายความเป็นส่วนตัว', width: 1862, height: 812 }],
 }
 
 // ส่วนที่ 1 ของ docs/uat/skouth-uat.md — ต้องตรงกับไฟล์บนดิสก์เป๊ะ
